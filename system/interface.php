@@ -19,22 +19,8 @@
 	interface Delete {
 		function delete($arg);
 	}
-	interface Addtoprinter {
-		function addtoprinter($arg);
-	}
-	interface Printing {
-		function printing($arg);
-	}
-
-	interface Duplicate {
-		function duplicate($arg);
-	}
 	
 	interface Link {
 		function link($arg);
-	}
-	
-	interface Merge {
-		function merge($arg);	
-	}
+	}	
 ?>
