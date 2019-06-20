@@ -1,0 +1,21 @@
+body, .act, #shell, select, #actForm {background-color: #1E1F23; } /*main background*/
+#wlis {background-color: #333437} /*list background*/
+.lis {background-color: #3E3F43;} /*search background*/
+.selParent {background-color: #2069A1; } /*list background selected*/
+.selParent dt {color:#EEEEEE;}
+.selParent dd {color:#C3C3C3;}
+.nav {background-color: #353944;} /*nav background*/
+#wnav li, #wnav li a, #ribbon .nav, #search {color: #D8D9DA}
+dt, h2 {color: #BBBCC0}
+dd, h5,#problem,#report {color: #6F7074}
+#userid strong {color: #0987FF}
+dl span {color:white}
+.actInput, select {color:#D4D4D4}
+#navSelected {background-color: #4A5364}
+#report:active {background-color:#303134}
+#ribbon .act, .lis {border-color: #1A1A1B}
+dl {border-color: #454648;}
+#ribbon .nav {border-bottom-color: #353944; border-right-color: #333437; }
+#ribbon .lis {border-bottom-color: #5B5C60;border-right-color:#1E1F23}
+hr, .row {border-color:#1F2025}
+::-webkit-input-placeholder, :-moz-placeholder,::-moz-placeholder, :-ms-input-placeholder  {color: #bfbfbf}
