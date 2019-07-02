@@ -197,7 +197,7 @@ hr {
 
 dl {
     font-size: 17px;
-    padding: 10px 10px 10px 10px;
+    padding: 10px;
 }
 #problem,
 #userid strong,
@@ -247,22 +247,12 @@ h2 {
     display: block;
     margin: 10px 30px 10px 10px;
 }
-.actInput,
-h2 {
+.actInput {
     background-color: transparent
 }
-h2 {
-    margin: 10px 16px 0;
-    font-size: 21px
-}
 .actInput,
-.row,
-h5 {
+.row {
     font-size: 17px
-}
-h5 {
-    margin: 0 16px 10px;
-    font-weight: 400
 }
 hr {
     border: 0;
@@ -289,6 +279,7 @@ hr {border-bottom: 1px solid}
 dl{border-bottom: solid 1px;}
 .lis {border-right: solid 1px}
 #ribbon .lis {border-bottom: solid 1px}
+#navlogin {display:none}
 
 @media screen and (min-color-index: 0)and(-webkit-min-device-pixel-ratio: 0) {
     @media {
@@ -297,40 +288,20 @@ dl{border-bottom: solid 1px;}
         }
     }
 }
-@media (max-width: 768px) {
-    .act,
-    .actw {
-        margin-left: 0
-    }
-    #wlis,
-    .act,
-    .lis,
-    .nav {
-        width: 100%
-    }
-    #userid strong,
-    .act,
-    .nav {
-        display: none
-    }
-    .row {
-        padding: 8px
-    }
-    h2,
-    h5 {
-        margin: 8px
-    }
-    .lis,
-    .nav {
-        border: none
-    }
-    #search {
-        font-size: 19px;
-        width: 76%
-    }
+@media (orientation:portrait),(max-width: 768px) {
+    .act,.actw {margin-left:0}
+    #wlis,.act,.lis,.nav {width: 100%}
+    #userid strong,.act,.nav {display: none}
+    .row {padding: 8px}
+    h2,h5 {margin: 8px}
+    .lis,.nav {border: none}
+    #search {font-size: 19px;width: 76%}
     #backButton,
     #menuButton,
-    #userid img {
-        display: block
-    }
+    #userid img {display: block}
+}
+@media (orientation:portrait) and (min-width: 1024px) {
+    #ribbon {display:none}
+    dt,dd{font-size:40px}
+    dl{padding:20px}
 }

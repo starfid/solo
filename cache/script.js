@@ -73,7 +73,7 @@ $.init.prototype = {
 	},
 };
 
-var selList = [], app, isEmpty, listCount, streamTm, prevStream = 0;
+var selList = [], app, listCount, prevStream = 0, shifted = !!0;
 
 searchFocus = function(){
 	var node = $('#search')[0];
@@ -92,15 +92,34 @@ setStream = function(){
 	-1<document.cookie.indexOf('stream=on')?
 	'stream=off':'stream=on':'stream=on';
 },
+streaming = function(){
+	var txt = '', i, prevIndex = $(selList[0]).attr('index');
+	$('#response').remove();
+	$.ajax('response','?group='+$('#group').val()+'&app='+$('#app').val()+'&keyword='+$('#search').val()+'&format=json&r='+Math.random());
+	if(response[app][0] !== undefined && response[app][0]['itemKey'] != prevStream){
+		listCount = response[app].length;
+		for(i in response[app]){
+			txt = txt + "<dl onmousedown='listSelected(this);searchFocus()' index='"+i+"'>";
+			txt = txt + "<dt>"+response[app][i]['itemTitle']+"</dt>";
+			txt = txt + "<dd>"+response[app][i]['itemInfo']+"</dd>";
+			txt = txt + "</dl>";
+		}
+		$('#wlis').text(txt);
+		listSelected($('#wlis > dl')[prevIndex]);
+	}
+	prevStream = response[app][0]['itemKey'];
+	setTimeout('streaming()',3000);
+},
 listSelected = function(o){
 	if(!response[app]) return false;
-	for(i in selList) $(selList[i]).rem('class');
-	selList = [];
-	selList.push(o);
+	if(!shifted){
+		for(i in selList) $(selList[i]).rem('class');
+		selList = [];
+	}
+	selList.indexOf(o)<0 && selList.push(o);
+
 	$(o).attr('class','selParent');
 	var res = response[app][$(o).attr('index')];
-	$('h2').text(res['itemTitle']);
-	$('h5').text(res['itemInfo']);
 	for(key in res) {
 		if(/(itemRank|itemInfo|itemTitle|itemAction|selIndex)/.test(key)) continue;
 		if(!!$('#'+key)[0]) {
@@ -112,24 +131,6 @@ listSelected = function(o){
 			}
 		}
 	}
-	streaming = function(){
-		var txt = '', i, prevIndex = $(selList[0]).attr('index');
-		$('#response').remove();
-		$.ajax('response','?group='+$('#group').val()+'&app='+$('#app').val()+'&keyword='+$('#search').val()+'&format=json&r='+Math.random());
-		if(response[app][0] !== undefined && response[app][0]['itemKey'] != prevStream){
-			listCount = response[app].length;
-			for(i in response[app]){
-				txt = txt + "<dl onmousedown='listSelected(this);searchFocus()' index='"+i+"'>";
-				txt = txt + "<dt>"+response[app][i]['itemTitle']+"</dt>";
-				txt = txt + "<dd>"+response[app][i]['itemInfo']+"</dd>";
-				txt = txt + "</dl>";
-			}
-			$('#wlis').text(txt);
-			listSelected($('#wlis > dl')[prevIndex]);
-		}
-		prevStream = response[app][0]['itemKey'];
-		setTimeout('streaming()',3000);
-	}	
 };
 
 window.onload = function(){
@@ -140,23 +141,22 @@ window.onload = function(){
 	if(notEmpty){
 		selList[0] = $('#wlis > dl')[$('#selIndex').val()];
 		($('dl').length && response[app]) && listSelected(selList[0]);
-
-		if(document.cookie.indexOf('stream=on')>-1){
-			setTimeout('streaming()',3000);
-		}
+		if(document.cookie.indexOf('stream=on')>-1) setTimeout('streaming()',3000);
 	}
 };
+document.onkeyup = function(e){
+	shifted = (e||window.event).shiftKey?!0:!!0;
+}
 document.onkeydown = function(e){
-	if((window.event.keyCode || e.which) == 27){
-		$('#search').val(''); searchFocus();
-	}
+	shifted = (e||window.event).shiftKey?!0:!!0;
+	if((e||window.event).keyCode == 27) $('#search').val(''); searchFocus();
 }
 $('#search').on('keydown',function(e){
 	if(selList.length < 1){ return; }
 	var keyCode = (window.event.keyCode || e.which), target, top;
 
 	if(keyCode==40 || keyCode==38){
-		var index = parseInt($(selList[0]).attr('index'));
+		var index = parseInt($(selList.slice(-1)[0]).attr('index'));
 
 		if(keyCode==40 && listCount-1 > index) index++;
 		else if(keyCode==38 && index > 0) index--;
@@ -175,4 +175,8 @@ $('#search').on('keydown',function(e){
 $('#wlis > dl').on('mousedown',function(){
 	listSelected(this);
 	searchFocus();
+});
+$('#menuButton').on('mousedown',function(){
+	$('.lis').css('display','none');
+	$('.nav,#navlogin').css('display','block');
 });

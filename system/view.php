@@ -71,18 +71,13 @@
 			$s .= "\n\t\t\t\t\t<input value=\"".$this->current['group']."\" name=\"group\" id=\"group\" type=\"hidden\" />";
 			$s .= "\n\t\t\t\t\t<input value=\"".$this->current['app']."\" name=\"app\" id=\"app\" type=\"hidden\" />";
 			$s .= "\n\t\t\t\t\t<input value=\"".$keyword."\" name=\"keyword\" id=\"search\" class=\"left\" placeholder=\"Search Here\" ondblclick=\"this.value=''\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" autocapitalize=\"off\" />";
-			$s .= "\n\t\t\t\t\t<img src=\"".$this->cacheFolder."/menu.png\" id=\"menuButton\" />";
+			$s .= "\n\t\t\t\t\t<img class='right' src=\"".$this->cacheFolder."/menu.png\" id=\"menuButton\" />";
 			$s .= "\n\t\t\t\t</form>";
 			$s .= "\n\t\t\t</div>";
 			$s .= "\n\t\t</div>";
 			$s .= "\n\t\t<div id=\"view\" class=\"both\">";
 			$s .= "\n\t\t\t<div class=\"right act\"><div class=\"actw both\"><div id=\"multiple\"><div id=\"shell\">";
 
-			$selectedTitle = isset($this->data['match'][0]['itemTitle'])?$this->data['match'][0]['itemTitle']:'Compose new data';
-			$selectedInfo =  isset($this->data['match'][0]['itemInfo'])?$this->data['match'][0]['itemInfo']:'Additional information';
-
-			$s .= "\n\t\t\t\t<h2>".$selectedTitle."</h2>";
-			$s .= "\n\t\t\t\t<h5>".$selectedInfo."</h5><hr />";
 			$s .= "\n\t\t\t\t<form method=\"post\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."\" id=\"actForm\" class=\"scroll\">";
 
 			if(isset($this->data['match']) && $this->data['count'] > 0) {
@@ -133,9 +128,10 @@
 			$scheme = $scheme=='dark'?'light':'dark';
 			$stream = $stream=='off'?'on':'off';
 			$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-			$s .= "\n\t\t\t\t<li class='group'>Viewing Options</li>";
+			$s .= "\n\t\t\t\t<li class='group'>Options</li>";
 			$s .= "\n\t\t\t\t\t<li><a title='Set background dimmer or lighter' onmousedown='setScheme()' href='".$url."'>Turn ".ucwords($scheme)."</a></li>";
 			$s .= "\n\t\t\t\t\t<li><a title='Set data refresh automatically on-off' onmousedown='setStream()' href='".$url."'>Set Stream ".ucwords($stream)."</a></li>";
+			$s .= "\n\t\t\t\t\t<li id='navlogin'><a href='login'>".($this->auth['username']=='guest'?'Login':'Log Out')."</a></li>";
 
 
 			$s .= "\n\t\t\t\t\t<li class=\"waste\"></li>";
@@ -144,19 +140,24 @@
 			$s .= "\n\t\t\t<div class=\"right lis\">";
 			$s .= "\n\t\t\t\t<div id=\"wlis\" class=\"scroll noSelectText\">";
 
+
+			$report = "<br /><br /><a id='report' href='?'>Report</a></div>";
+			$problem = "\n\t\t\t\t<div id='problem'>";
 			if(isset($this->data['error']) || $this->data['count'] < 1) {
-				$report = "<br /><br /><a id='report' href='?'>Report</a></div>";
 				$error = isset($this->data['error'])?$this->data['error']:'No data available';
-				$s .= "\n\t\t\t\t<div id='problem'>".$error.$report;
+				$s .= $problem.$error.$report;
 			}
-			elseif(
-				!isset($this->data['match'][0]['itemTitle']) ||
-				!isset($this->data['match'][0]['itemInfo']) ||
-				!isset($this->data['match'][0]['itemKey'])
-			){
-				$report = "<br /><br /><a id='report' href='?'>Report</a></div>";
-				$error = 'Data does not contain itemTitle or itemInfo or itemKey';
-				$s .= "\n\t\t\t\t<div id='problem'>".$error.$report;
+			elseif(!isset($this->data['match'][0]['itemTitle'])) {
+				$error = 'Data does not contain itemTitle';
+				$s .= $problem.$error.$report;
+			}
+			elseif(!isset($this->data['match'][0]['itemInfo'])) {
+				$error = 'Data does not contain itemInfo';
+				$s .= $problem.$error.$report;
+			}
+			elseif(!isset($this->data['match'][0]['itemKey'])) {
+				$error = 'Data does not contain itemKey';
+				$s .= $problem.$error.$report;
 			}
 			else {
 				for($i=0;$i<$this->data['count'];$i++) {
