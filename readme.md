@@ -11,14 +11,14 @@ Today we have big and wider screen monitor, but the amount of lights from big sc
 
 
 ## Starfid SOLO specifications
-- Lighter, less than 50KB in zipped codes.
+- Lighter, less than 50KB in zip file.
 - PHP 7+ compatibilty.
 - PHP Data Objects (PDO).
 - Dark mode.
-- Natural multiple selection with shift key and arrow/mousedown
+- Natural multiple selection with shift key and arrow/mousedown.
 - Streaming aka realtime content update.
 - Responsive layout to accomodate 16:9 desktop monitor to 9:16 portrait phone screen.
-- Portrait mode for potrait TV
+- Portrait mode for portrait TV.
 - 3 columns layout on desktop.
 - Editable content without multiple click or steps.
 - Correct search result order. The most relevance result is on the top.
