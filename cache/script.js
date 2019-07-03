@@ -187,10 +187,10 @@ setStream = function(){
 	'stream=off':'stream=on':'stream=on';
 },
 streaming = function(){
-	var txt = '', i, prevIndex = $(selList[0]).attr('index');
+	var txt = '', i, prevIndex = $(selList[0]).attr('index'), pos = [5,10,80,82,84,84];
 	$('#response').remove();
 	$.ajax('response','?group='+$('#group').val()+'&app='+$('#app').val()+'&keyword='+$('#search').val()+'&format=json&r='+Math.random());
-	if(response[app][0] !== undefined && response[app][0]['itemKey'] != prevStream){
+	if(response[app][0] !== undefined && prevStream != 0 && response[app][0]['itemKey'] != prevStream){
 		listCount = response[app].length;
 		for(i in response[app]){
 			txt = txt + "<dl onmousedown='listSelected(this);searchFocus()' index='"+i+"'>";
@@ -198,9 +198,17 @@ streaming = function(){
 			txt = txt + "<dd>"+response[app][i]['itemInfo']+"</dd>";
 			txt = txt + "</dl>";
 		}
-		$('#wlis').text(txt);
-		listSelected($('#wlis > dl')[prevIndex]);
-				}
+		$.timer(6,70,
+			function(i){
+				$('#wlis').css('margin-top',pos[i]+'px');
+			},
+			function(){
+				$('#wlis').css('margin-top','0');
+				$('#wlis').text(txt);
+				listSelected($('#wlis > dl')[prevIndex]);
+			}
+		);
+	}
 	prevStream = response[app][0]['itemKey'];
 	setTimeout('streaming()',3000);
 },
