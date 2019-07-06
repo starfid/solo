@@ -1,3 +1,7 @@
+if(window.navigator.userAgent.indexOf('MSIE ')>1){
+	document.title = 'Sorry';
+	document.body.innerHTML = '<font color=white><h1>Support for older<br />versions of Internet<br />Explorer ended</h1>Microsoft no longer provides security updates or<br />technical support for old versions of Internet Explorer.<br />Please use another browser.</font>';
+}
 var $ = function(expr, context) {
 	return new $.init(expr, context);
 };
@@ -28,7 +32,7 @@ $.submitting = function(submit){
 	loop = function(i) {
 		$('#multiple').css({
 			'zoom'				:(98-i)+'%',
-			'padding'			:(2+i)+'%',
+			'padding'			:(2+i)+'%'
 		});	
 	},
 	stack = function(){
@@ -162,7 +166,7 @@ $.init.prototype = {
 	text: function(dat){
 		var el = this[0];
 		return arguments.length ? (el.innerHTML = dat, '') : el.innerHTML;
-	},
+	}
 };
 
 var selList = [], app, listCount, prevStream = 0, shifted = !!0,
@@ -170,8 +174,8 @@ isLight = document.cookie.indexOf('scheme=light')>-1?true:false,
 isStacked = false;
 
 searchFocus = function(){
-	var node = $('#search')[0];
 	setTimeout(function(){
+		var node = $('#search')[0];
 		node.focus();
 		"number"==typeof node.selectionStart?node.selectionStart=node.selectionEnd=node.value.length:"undefined"!=typeof node.createTenodetRange&&(r=node.createTenodetRange(),r.collapse(!1),r.select())
 	},10);
@@ -253,6 +257,7 @@ window.onload = function(){
 		($('dl').length && response[app]) && listSelected(selList[0]);
 		if(document.cookie.indexOf('stream=on')>-1) setTimeout('streaming()',3000);
 	}
+
 };
 document.onkeyup = function(e){
 	shifted = (e||window.event).shiftKey?!0:!!0;
@@ -263,7 +268,7 @@ document.onkeydown = function(e){
 }
 $('#search').on('keydown',function(e){
 	if(selList.length < 1){ return; }
-	var keyCode = (window.event.keyCode || e.which), target, top;
+	var keyCode = (e.which||window.event.keyCode ), target, top;
 
 	if(keyCode==40 || keyCode==38){
 		var index = parseInt($(selList.slice(-1)[0]).attr('index'));

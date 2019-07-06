@@ -114,14 +114,14 @@ a {
 #menuButton,
 #save,
 #userid img {
-    display: none
+    display: block
 }
 ::-webkit-scrollbar {display: none;}
 .scroll {
     height: 100%;
     overflow: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    xpadding-right: 16px;
     scrollbar-width: none;
     scrollbar-base-color: #fff;
     scrollbar-face-color: #fff;
@@ -188,11 +188,7 @@ hr {
     padding-left: 20px;
 }
 #wnav {
-    xwidth: 112%;
     font-weight: lighter
-}
-#wlis {
-    xwidth: 105%;
 }
 
 dl {
