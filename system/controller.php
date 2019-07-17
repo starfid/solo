@@ -10,9 +10,7 @@
 			$this->priviledge = $setting['priv'];
 			$this->expiration($setting['personal']['expired']);
 			!isset($_SESSION[$this->token]['apps']) && $this->getApps();
-			$this->checkSystem();
-			array_walk($_POST,function(&$value,&$key) {$value = !get_magic_quotes_gpc()?addslashes($value):$value;});
-
+			$this->pathCheck();
 			$this->loginSubmitted = 
 				isset($_POST['username']) && !empty($_POST['username']) && strlen($_POST['username']) > 2 &&
 				isset($_POST['password']) && !empty($_POST['password']) && strlen($_POST['username']) > 2 &&
@@ -52,7 +50,7 @@
 			$folder = $session['apps'][$type];
 			$group = key($folder);
 			$app = min($folder[$group]);
-			$method = 'init';
+			$method = 'primary';
 
 			$this->current['type'] = $type;
 			$this->current['appType'] = $type;
@@ -73,25 +71,31 @@
 				  	}
 				}
 			}
-			if(
+
+			if(isset($_POST['itemAction']) && in_array($_POST['itemAction'],array('delete','update','compose'))){
+				$this->current['method'] = $_POST['itemAction'];
+				$this->current['arg'] = $_POST;
+			}
+			elseif(
 				isset($_GET['keyword']) && !empty($_GET['keyword']) &&
 				((!is_numeric($_GET['keyword']) && strlen($_GET['keyword']) > 2) || is_numeric($_GET['keyword']))
 			) {
 				$this->current['method'] = 'search';
-				$this->current['arg'] = stripslashes($_GET['keyword']);
+				$this->current['arg'] = addslashes($_GET['keyword']);
 			}
-
-			$this->loginSubmitted && $this->current = array(
-				'type' => 'admin',
-				'appType' => 'admin',
-				'group' => 'user',
-				'app' => $_POST['type'],
-				'method' => 'search',
-				'arg' => $_POST['username'].md5($_POST['password'])
-			);
+			elseif($this->loginSubmitted){
+				$this->current = array(
+					'type' => 'admin',
+					'appType' => 'admin',
+					'group' => 'user',
+					'app' => $_POST['type'],
+					'method' => 'search',
+					'arg' => $_POST['username'].md5($_POST['password'])
+				);
+			}
 		}
 
-		function checkSystem(){
+		function pathCheck(){
 			if(!isset($_SESSION[$this->token]['apps']['admin']['user']) || !in_array('admin',$_SESSION[$this->token]['apps']['admin']['user'])) {
 				echo 'admin/user/admin.php in application folder is not found'; exit();
 			}
@@ -101,6 +105,7 @@
 			elseif(isset($_SESSION[$this->token]['auth']['type']) && !array_key_exists($_SESSION[$this->token]['auth']['type'],$_SESSION[$this->token]['apps'])){
 				echo $_SESSION[$this->token]['auth']['type'].' is not found in application folder'; exit();
 			}
+
 		}
 
 		function expiration($minute){

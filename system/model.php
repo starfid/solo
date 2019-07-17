@@ -12,8 +12,24 @@
 				echo $e->getMessage(); exit;
 			}
 			$currentMethod = $current['method'];
-			$method = in_array($current['method'],array_map('strtolower',array_keys(class_implements($this))))?$this->$currentMethod($current['arg']):$this->init();
+			$availMethods = $current['methods'];
+
+			if(!in_array('primary',$availMethods)) {
+				echo 'Application required Primary interface to be implemented';
+				exit();
+			}
+			$method = in_array($current['method'],$availMethods)?$this->$currentMethod($current['arg']):$this->primary();
 			isset($this->sql) && $method->query($current,$token);
+
+			//run primary or search after post
+			if(in_array($currentMethod,array('compose','update','delete'))){
+				if(in_array('search',$availMethods) && isset($_GET['keyword']) && strlen($_GET['keyword'])>2){
+					$this->search(stripslashes($_GET['keyword']))->query($current,$token);
+				}
+				else {
+					$this->primary()->query($current,$token);
+				}
+			}
 		}
 		
 		public function query($current,$token) {
@@ -28,17 +44,14 @@
 						$this->result['count'] = $exec->rowCount();
 						foreach(range(0, $exec->columnCount() - 1) as $column_index) {
 							$meta = $exec->getColumnMeta($column_index);
-							$this->result['columns'][$meta['name']] = "";
+							$this->result['columns'][] = $meta['name'];
 						}
-						$this->result['columns']['itemTitle'] = ucwords($current['app']);
-						$this->result['columns']['itemInfo'] = "New Entry";
 					}
 				}
 				catch(PDOException $e) {
 					$this->result['error'] = $e->getMessage();
 				}
 			}
-			//print_r($this->result);
 			unset($this->sql);
 		}
 		

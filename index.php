@@ -12,9 +12,11 @@
 	$get->currentApp();
 
 	require($setting['folder']['apps'].'/'.$get->current['appType'].'/'.$get->current['group'].'/'.$get->current['app'].'.php');
-	require($setting['folder']['system'].'/model.php');
+	$get->current['methods'] = array_map('strtolower',array_keys(class_implements(new Application)));
 
+	require($setting['folder']['system'].'/model.php');
 	$data = new Model($setting['database'],$get->current,$setting['personal']['token']);
+
 	$get->loginSubmitted && $get->authentication($data->result);
 
 	require($setting['folder']['system'].'/view.php');

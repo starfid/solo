@@ -17,7 +17,7 @@
 		}
 
 		function html(){
-			$keyword = in_array('search',$this->current['methods']) && isset($_GET['keyword']) && strlen(trim($_GET['keyword'])) > 2?stripslashes(stripslashes(stripslashes(trim($_GET['keyword'])))):"";
+			$keyword = isset($_GET['keyword']) && strlen(trim($_GET['keyword'])) > 2?stripslashes(stripslashes(stripslashes(trim($_GET['keyword'])))):"";
 			$keywordURL = empty($keyword)?'':'&keyword='.$keyword;
 			$predefined = array('itemTitle','itemInfo','itemKey','itemRank','itemChartLabel','itemChartNumber');
 			$settings = Array();
@@ -110,9 +110,13 @@
 
 			$s .= "\n\t\t\t\t<form method=\"post\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."".$keywordURL."\" id=\"actForm\" class=\"scroll\">";
 
-			if(isset($this->data['columns'])) {
-				foreach($this->data['columns'] as $column){
+//print_r($this->data);
+			if(!$isEmpty) {
+
+				foreach(array_keys($this->data['match'][0]) as $column){
 					if(substr($column,-3)=='_id') $services[] = $column;
+				}
+				foreach($this->data['match'][$selIndex] as $column => $value){
 					if(!in_array($column,$predefined)){
 						$s .= "\n\t\t\t\t\t<div class=\"row\">";
 						$s .= "\n\t\t\t\t\t\t<div class=\"label left\">".ucwords(str_replace(array('_id','_'),array('',' '),$column))."</div>";
@@ -122,14 +126,19 @@
 							$s .= "\n\t\t\t\t\t\t\t<select id=\"".$column."\" name=\"".$column."\"></select>";
 						}
 						else{
-							$s .= "\n\t\t\t\t\t\t\t<input type=\"text\" class=\"actInput\" id=\"".$column."\" name=\"".$column."\" value=\"\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" />";
+							$s .= "\n\t\t\t\t\t\t\t<input type=\"text\" class=\"actInput\" id=\"".$column."\" name=\"".$column."\" value=\"".$value."\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" />";
 						}
 
 						$s .= "\n\t\t\t\t\t\t</div>";
-						$s .= "\n\t\t\t\t\t</div>";						
+						$s .= "\n\t\t\t\t\t</div>";
 					}
 				}
-			
+
+				//$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemAction\" value=\"\" id=\"itemAction\" />";
+				//$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"selIndex\" value=\"0\" id=\"selIndex\" />";
+			}
+
+			if(isset($this->data['columns'])) {
 				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemAction\" value=\"\" id=\"itemAction\" />";
 				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"selIndex\" value=\"0\" id=\"selIndex\" />";
 			}
@@ -165,14 +174,11 @@
 			$s .= "\n\t\t\t<div class=\"right lis\">";
 			$s .= "\n\t\t\t\t<div id=\"wlis\" class=\"scroll noSelectText\">";
 
-			$problem = "\n\t\t\t\t<div id='problem'>";
-			$report = "</div>";
 
-			if($isEmpty && isset($_GET['keyword']) && in_array('search',$this->current['methods'])) {
-				$error = isset($this->data['error'])?$this->data['error']:'No results were found. Make sure keyword are spelled correctly or try different keywords';
-				$s .= $problem.$error.$report;
-			}
-			elseif($isEmpty) {
+			$report = "<br /><br /><a id='report' href='?'>Report</a></div>";
+			$problem = "\n\t\t\t\t<div id='problem'>";
+
+			if($isEmpty) {
 				$error = isset($this->data['error'])?$this->data['error']:'No data available';
 				$s .= $problem.$error.$report;
 			}
