@@ -53,6 +53,7 @@ $.submitting = function(submit){
 	sending = function(cut){
 		var steps = [
 			function() {
+				$('#actions > img').css('display','none');
 				$('#shell').css({
 					'padding-top'	:'0px',
 					'border'		:'solid 1px #'+(isLight?'B0B0B0':'17181C')
@@ -248,9 +249,10 @@ listSelected = function(o){
 			$('#shell').css({'padding-top':'0px','border':'0'});
 			$('#multiple').css({'zoom':'100%','padding':'0','background-color':'transparent'});
 			$('#actForm').css('overflow','auto');
+			$('#actions > img').css('display','block');
 		}
 	}
-	else !isStacked && $.submitting(false);
+	else !isStacked && (listCount > 1) && $.submitting(false);
 
 	//check not double
 	selList.indexOf(o)<0 && selList.push(o);
@@ -265,7 +267,7 @@ listSelected = function(o){
 			if($('#'+key)[0].nodeName=="INPUT") $('#'+key).val(res[key]);
 			else {
 				var i, tmp = [], col = response[key.replace('_id','')];
-				for(var i in col) tmp.push("<option "+(res[key]==col[i]['itemKey']?'selected':'')+">"+col[i]['itemTitle']+"</option>");
+				for(var i in col) tmp.push("<option value=\""+col[i]['itemKey']+"\" "+(res[key]==col[i]['itemKey']?'selected':'')+">"+col[i]['itemTitle']+"</option>");
 				$('#'+key).text(tmp.join(''));
 			}
 		}
@@ -278,7 +280,6 @@ window.onload = function(){
 	notEmpty = listCount<1?false:true;
 	searchFocus();
 	if(notEmpty){
-		//selList[0] = $('#wlis > dl')[$('#selIndex').val()];
 		selList[0] = $('#wlis > dl')[0];
 		($('dl').length && response[app]) && listSelected(selList[0]);
 		if(document.cookie.indexOf('stream=on')>-1) setTimeout('streaming()',3000);
