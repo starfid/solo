@@ -71,7 +71,7 @@
 			$s .= "\n\t\t\t<div class=\"right act\"><div class=\"actw both\">";
 			$s .= "\n\t\t\t\t<div class=\"left\" id=\"actions\">";
 
-			//$s .= "\n\t\t\t\t\t<img id=\"backButton\" class=\"left\" src=\"".$this->cacheFolder."/back.png\" />";
+			$s .= "\n\t\t\t\t\t<img id=\"backButton\" class=\"left\" src=\"".$this->cacheFolder."/back.png\" />";
 
 			foreach(array_diff($this->current['methods'],array('primary','search')) as $methods => $method){
 				$s .= "\n\t\t\t\t\t<img id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";

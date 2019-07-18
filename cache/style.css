@@ -110,7 +110,7 @@ a {
 .nav .pad {
     font-size:16px!important;
 }
-#backButton,
+#backButton{display:none}
 #menuButton,
 #save,
 #userid img {

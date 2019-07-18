@@ -173,7 +173,7 @@ $.init.prototype = {
 	}
 };
 
-var selList = [], app, listCount, prevStream = 0, shifted = !!0,
+var selList = [], app, listCount, prevStream = 0, shifted = !!0, isPortrait = !0,
 isLight = document.cookie.indexOf('scheme=light')>-1?true:false,
 isStacked = false;
 
@@ -250,6 +250,7 @@ listSelected = function(o){
 			$('#multiple').css({'zoom':'100%','padding':'0','background-color':'transparent'});
 			$('#actForm').css('overflow','auto');
 			$('#actions > img').length > 0 && $('#actions > img').css('display','block');
+			$('')
 		}
 	}
 	else !isStacked && (listCount > 1) && $.submitting(false);
@@ -293,6 +294,7 @@ window.onload = function(){
 	app = $("#app").val();
 	listCount = $('#wlis > dl').length;
 	notEmpty = listCount<1?false:true;
+	isPortrait = $('.act').css('width')<1;
 	searchFocus();
 
 	if(notEmpty){
@@ -338,6 +340,10 @@ $('#search').on('keydown',function(e){
 $('#wlis > dl').on('mousedown',function(){
 	listSelected(this);
 	searchFocus();
+	isPortrait && setTimeout(function(){
+		$('.lis').css('display','none');
+		$('.act').css('display','block');
+	},100);
 });
 $('#menuButton').on('mousedown',function(){
 	$('.lis').css('display','none');
@@ -345,7 +351,11 @@ $('#menuButton').on('mousedown',function(){
 });
 $('#actions img').on('mousedown',function(){
 	var action = $(this).attr('id');
-	if(action=='compose'){
+	if(action=='backButton'){
+		$('.act').css('display','none');
+		$('.lis').css('display','block');
+	}
+	else if(action=='compose'){
 		$('#actForm input').each(function(obj){
 			$(obj).val('');
 		});
@@ -360,6 +370,21 @@ $('#actions img').on('mousedown',function(){
 		if(action=='delete' && !confirm('Are you sure to delete '+selList.length+' item'+((selList.length>1)?'s':'')+'?')){
 			return false;
 		}
+		$.submitting(true);
+	}
+});
+$('.wrapper > input').on('keydown',function(e){
+	var id = $(this).attr('id'), tmp = [], found = 0;
+	if((e.which||window.event.keyCode)!=13) return false;
+	for(i in response[app][0]){
+		if(i.substr(-3)!='_id') tmp.push(i);
+	}
+	found = tmp.indexOf(id)+1;
+	if(found<tmp.length){
+		$('#'+tmp[found])[0].focus();
+	}
+	else if($('#update').length>0){
+		if($('#itemAction').val()=='') $('#itemAction').val('update');
 		$.submitting(true);
 	}
 });
