@@ -253,14 +253,12 @@ listSelected = function(o){
 		}
 	}
 	else !isStacked && (listCount > 1) && $.submitting(false);
-
 	//check not double
 	selList.indexOf(o)<0 && selList.push(o);
 	createKey();
 
 	$(o).attr('class','selParent');
 	var res = response[app][$(o).attr('index')];
-
 	for(key in res) {
 		if(/(itemRank|itemInfo|itemTitle|itemAction)/.test(key)) continue;
 		if(!!$('#'+key)[0]) {
@@ -272,22 +270,39 @@ listSelected = function(o){
 			}
 		}
 	}
+},
+firstCompose = function(){
+	$('#actions > img').each(function(o){
+		if(['update'].indexOf($(o).attr('id'))<0){
+			$(o).css('display','none');
+		}
+	});
+	$('.wrapper > *').each(function(o){
+		if($(o)[0].nodeName=='SELECT'){
+			var col = response[$(o).attr('id').replace('_id','')], i, tmp = [];
+			for(var i in col) tmp.push("<option value=\""+col[i]['itemKey']+"\">"+col[i]['itemTitle']+"</option>");
+			$(o).text(tmp.join(''));
+		}
+	});
+	$('#itemAction').val('compose');
 };
+
+
 
 window.onload = function(){
 	app = $("#app").val();
 	listCount = $('#wlis > dl').length;
 	notEmpty = listCount<1?false:true;
 	searchFocus();
+
 	if(notEmpty){
 		selList[0] = $('#wlis > dl')[0];
 		($('dl').length && response[app]) && listSelected(selList[0]);
 		if(document.cookie.indexOf('stream=on')>-1) setTimeout('streaming()',3000);
 	}
 	else if(!notEmpty && $('.row').length>0 && $('#wlis > dl').length<1){
-		$('#itemAction').val('compose');
+		firstCompose();
 	}
-
 };
 document.onkeyup = function(e){
 	shifted = (e||window.event).shiftKey?!0:!!0;
