@@ -76,14 +76,7 @@
 			foreach(array_diff($this->current['methods'],array('primary','search')) as $methods => $method){
 				$s .= "\n\t\t\t\t\t<img id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";
 			}
-			if(
-				in_array('primary',$this->current['methods']) && 
-				!isset($this->data['error']) &&
-				!in_array('update',$this->current['methods'])
-			){
-				$s .= "\n\t\t\t\t\t<img id=\"update\" class=\"left\" src=\"".$this->cacheFolder."/update.png\" />";
-			}
-			
+
 			$s .= "\n\t\t\t\t</div>";
 			$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onmousedown=\"document.location='login/?log=out'\">";
 

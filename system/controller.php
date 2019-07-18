@@ -11,6 +11,7 @@
 			$this->expiration($setting['personal']['expired']);
 			!isset($_SESSION[$this->token]['apps']) && $this->getApps();
 			$this->pathCheck();
+			$this->addingSlash();
 			$this->loginSubmitted = 
 				isset($_POST['username']) && !empty($_POST['username']) && strlen($_POST['username']) > 2 &&
 				isset($_POST['password']) && !empty($_POST['password']) && strlen($_POST['username']) > 2 &&
@@ -28,6 +29,16 @@
 				);
 			}
 			header('Location: ./');
+		}
+
+		function addingSlash(){
+			if(isset($_POST)){
+				$tmp = Array();
+				foreach($_POST as $key => $value){
+					$tmp[$key] = is_array($value)?$value:addslashes(trim($value));
+				}
+				$_POST = $tmp;
+			}
 		}
 
 		function setApps($session){
@@ -71,7 +82,6 @@
 				  	}
 				}
 			}
-
 			if(isset($_POST['itemAction']) && in_array($_POST['itemAction'],array('delete','update','compose'))){
 				$this->current['method'] = $_POST['itemAction'];
 				$this->current['arg'] = $_POST;

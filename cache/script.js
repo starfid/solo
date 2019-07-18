@@ -28,7 +28,7 @@ $.submitting = function(submit){
 		$('#actForm').css('overflow','hidden');
 		$('#multiple').css('background-color',(isLight?'#CACACA':'#000000'));
 		$('#actions > img').each(function(o){
-			if(['delete'].indexOf($(o).attr('id'))<0){
+			if(['delete'].indexOf($(o).attr('id'))<0 && !submit){
 				$(o).css('display','none');
 			}
 		});
@@ -249,7 +249,7 @@ listSelected = function(o){
 			$('#shell').css({'padding-top':'0px','border':'0'});
 			$('#multiple').css({'zoom':'100%','padding':'0','background-color':'transparent'});
 			$('#actForm').css('overflow','auto');
-			$('#actions > img').css('display','block');
+			$('#actions > img').length > 0 && $('#actions > img').css('display','block');
 		}
 	}
 	else !isStacked && (listCount > 1) && $.submitting(false);
@@ -357,6 +357,9 @@ $('#actions img').on('mousedown',function(){
 	else{
 		if(action=='update' && $('#itemAction').val() =='compose') action = 'compose';
 		$('#itemAction').val(action);
+		if(action=='delete' && !confirm('Are you sure to delete '+selList.length+' item'+((selList.length>1)?'s':'')+'?')){
+			return false;
+		}
 		$.submitting(true);
 	}
 });
