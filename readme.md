@@ -1,3 +1,5 @@
+![Starfid Solo](https://raw.githubusercontent.com/starfid/solo/master/preview.png)
+
 ## Background
 - Desktop screen are now wider and fit for multiple column views.
 - Many codings are old and based on PHP 4, released on 2000. The curent PHP version is 7.3.
