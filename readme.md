@@ -19,6 +19,7 @@
 - Responsive mobile layout and desktop landscape/portrait.
 - 3 columns layout on desktop.
 - SQL app based. Everyone can develop with SQL knowledge.
+- Multiple view formats on url suffix: HTML, JSON, XML, Print_r
 
 
 ## Whistlist
