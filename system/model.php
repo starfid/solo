@@ -15,11 +15,16 @@
 			$availMethods = $current['methods'];
 
 			if(!in_array('primary',$availMethods)) {
-				echo 'Application required Primary interface to be implemented';
-				exit();
+				echo 'Primary interface is required to be implemented in Application class'; exit();
 			}
+
 			$method = in_array($current['method'],$availMethods)?$this->$currentMethod($current['arg']):$this->primary();
-			isset($this->sql) && $method->query($current,$token);
+			if(isset($this->sql)){
+				$method->query($current,$token);
+			}
+			else{
+				$this->result['error'] = 'sql variable is not declared.<br />No data available';
+			}
 
 			//run primary or search after post
 			if(in_array($currentMethod,array('compose','update','delete'))){

@@ -103,6 +103,16 @@
 					'arg' => $_POST['username'].md5($_POST['password'])
 				);
 			}
+
+		}
+
+		function availMethods(){
+			if(class_exists('Application')){
+				$this->current['methods'] = array_map('strtolower',array_keys(class_implements(new Application)));
+			}
+			else{
+				echo 'class Application is not found in '.$this->current['app'].' file'; exit();
+			}
 		}
 
 		function pathCheck(){
@@ -112,10 +122,15 @@
 			elseif(!isset($_SESSION[$this->token]['apps']['guest'])){
 				echo 'guest is not found in application folder'; exit();
 			}
+			elseif(count($_SESSION[$this->token]['apps']['guest'])<1){
+				echo 'guest need folder and app file. Example guest/folder/app.php'; exit();
+			}
+			elseif(count(min($_SESSION[$this->token]['apps']['guest']))<1){
+				echo 'Require php app file in guest/'.min(array_keys($_SESSION[$this->token]['apps']['guest'])); exit();
+			}
 			elseif(isset($_SESSION[$this->token]['auth']['type']) && !array_key_exists($_SESSION[$this->token]['auth']['type'],$_SESSION[$this->token]['apps'])){
 				echo $_SESSION[$this->token]['auth']['type'].' is not found in application folder'; exit();
 			}
-
 		}
 
 		function expiration($minute){

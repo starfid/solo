@@ -12,7 +12,7 @@
 	$get->currentApp();
 
 	require($setting['folder']['apps'].'/'.$get->current['appType'].'/'.$get->current['group'].'/'.$get->current['app'].'.php');
-	$get->current['methods'] = array_map('strtolower',array_keys(class_implements(new Application)));
+	$get->availMethods();
 
 	require($setting['folder']['system'].'/model.php');
 	$data = new Model($setting['database'],$get->current,$setting['personal']['token']);
