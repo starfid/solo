@@ -2,15 +2,15 @@
 
 ## Background
 - Desktop screen are now wider and fit for multiple column views.
-- Many codings are old and based on PHP 4, released on 2000. The curent PHP version is 7.3.
-- Mysql prefix function is absolete in PHP 5.5 on 2013. PHP PDO is future proof and expandable
+- Many codings are old and based on PHP 4, released on 2000s. The latest PHP version is 7.3.
+- Mysql prefix function is absolete in PHP 5.5 on 2013. PHP PDO is future proof and expandable.
 - We need darker theme for eyes health.
 - We need 1 app for variety of screen size and ratio. From mobile phone to portrait TV.
 - Modules should be easy to make with SQL query.
 
 
 ## Starfid SOLO specifications
-- PHP 5.3 - 7.36.
+- PHP 5.3 - 7.36, tested.
 - Micro PHP framework, less than 50KB in zip file.
 - PHP Data Objects (PDO).
 - PHP app framework, can adapt on any database.
