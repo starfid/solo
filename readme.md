@@ -13,6 +13,7 @@
 - PHP 5.3 - 7.36.
 - Micro application, less than 50KB in zip file.
 - PHP Data Objects (PDO).
+- PHP app framework, can adapt on any database.
 - Dark mode setting.
 - Multiple selection using shift key and arrow key/mouse click.
 - Automatic content update setting.
