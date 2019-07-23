@@ -6,12 +6,12 @@
 - Mysql prefix function is absolete in PHP 5.5 on 2013. PHP PDO is future proof and expandable
 - We need darker theme for eyes health.
 - We need 1 app for variety of screen size and ratio. From mobile phone to portrait TV.
-- Modules should be easy to make in instant.
+- Modules should be easy to make with SQL query.
 
 
 ## Starfid SOLO specifications
 - PHP 5.3 - 7.36.
-- Micro application, less than 50KB in zip file.
+- Micro PHP framework, less than 50KB in zip file.
 - PHP Data Objects (PDO).
 - PHP app framework, can adapt on any database.
 - Dark mode setting.
