@@ -18,6 +18,7 @@
 	$data = new Model($setting['database'],$get->current,$setting['personal']['token']);
 
 	$get->loginSubmitted && $get->authentication($data->result);
+	$get->current['method']=='link' && $data->result['count']==1 && $get->linkMethod($data->result);
 
 	require($setting['folder']['system'].'/view.php');
 	new View(array_merge($setting['folder'],$setting['personal']),$get->current,$data->result);

@@ -12,9 +12,11 @@
 			$this->cacheFolder = $setting['cache'];
 			$this->current = $current;
 			$this->data = $data;
+			$this->isEmpty = isset($this->data['error']) || $this->data['count'] < 1?true:false;
 			$format = isset($_GET['format'])?$_GET['format']:NULL;
 			method_exists($this,$format)?$this->$format():$this->html();
 		}
+
 
 		function html(){
 			$keyword = in_array('search',$this->current['methods']) && isset($_GET['keyword']) && strlen(trim($_GET['keyword'])) > 2?stripslashes(stripslashes(stripslashes(trim($_GET['keyword'])))):"";
@@ -24,9 +26,8 @@
 			$services = array();
 			$scheme = isset($_COOKIE['scheme'])?$_COOKIE['scheme']:'dark';
 			$stream = isset($_COOKIE['stream'])?$_COOKIE['stream']:'off';
-			$isEmpty = isset($this->data['error']) || $this->data['count'] < 1?true:false;
 
-			if(!$isEmpty){
+			if(!$this->isEmpty){
 				$noTitle = !isset($this->data['match'][0]['itemTitle'])?true:false;
 				$noInfo = !isset($this->data['match'][0]['itemInfo'])?true:false;
 				$noKey = !isset($this->data['match'][0]['itemKey'])?true:false;
@@ -74,8 +75,9 @@
 			$s .= "\n\t\t\t\t\t<img id=\"backButton\" class=\"left\" src=\"".$this->cacheFolder."/back.png\" />";
 
 			foreach(array_diff($this->current['methods'],array('primary','search')) as $methods => $method){
-				$s .= "\n\t\t\t\t\t<img id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";
+				$s .= "\n\t\t\t\t\t<img title=\"".ucfirst(str_replace('update','save',$method))."\" id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";
 			}
+
 
 			$s .= "\n\t\t\t\t</div>";
 			$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onmousedown=\"document.location='login/?log=out'\">";
@@ -101,7 +103,7 @@
 			$s .= "\n\t\t<div id=\"view\" class=\"both\">";
 			$s .= "\n\t\t\t<div class=\"right act\"><div class=\"actw both\"><div id=\"multiple\"><div id=\"shell\">";
 
-			$s .= "\n\t\t\t\t<form method=\"post\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."".$keywordURL."\" id=\"actForm\" class=\"scroll\">";
+			$s .= "\n\t\t\t\t<form style='height:100%' method=\"post\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."".$keywordURL."\" id=\"actForm\" class=\"scroll\">";
 
 			if(isset($this->data['columns'])) {
 				foreach($this->data['columns'] as $column){
@@ -129,7 +131,18 @@
 
 			$s .= "\n\t\t\t\t\t<div class=\"waste\"></div>";
 			$s .= "\n\t\t\t\t</form>";
-			$s .= "\n\t\t\t</div></div></div></div>";
+			$s .= "\n\t\t\t</div></div>";
+
+/*
+			$s .= "\n\t\t\t\t<div id='plis' style='height:100%;' class='scroll'>";
+			$s .= "<div class=\"row\"><div class='label left'>Title</div> <div class='wrapper'><input class='actInput' value='Mencari Demokrasi' /></div></div>";
+			$s .= "<div class=\"row\"><div class='label left'>Author</div> <div class='wrapper'><input class='actInput' value='Soekarno Hatta' /></div></div>";
+			$s .= "<div class=\"row\"><div class='label left'>Publihser</div> <div class='wrapper'><input class='actInput' value='Bandung' /></div></div>";
+			$s .= "<div class=\"row\"><div class='label left'>Magterial</div> <div class='wrapper'><input class='actInput' value='type Buku' /></div></div>";
+			$s .= "\n\t\t\t\t</div>\n\t\t\t";
+*/
+
+			$s .= "</div></div>";
 			$s .= "\n\t\t\t<div class=\"left nav\">";
 			$s .= "\n\t\t\t\t<ul class=\"scroll\" id=\"wnav\">";
 
@@ -161,11 +174,11 @@
 			$problem = "\n\t\t\t\t<div id='problem'>";
 			$report = "</div>";
 
-			if($isEmpty && isset($_GET['keyword']) && in_array('search',$this->current['methods'])) {
+			if($this->isEmpty && isset($_GET['keyword']) && in_array('search',$this->current['methods'])) {
 				$error = isset($this->data['error'])?$this->data['error']:'No results were found. Make sure keyword are spelled correctly or try different keywords';
 				$s .= $problem.$error.$report;
 			}
-			elseif($isEmpty) {
+			elseif($this->isEmpty) {
 				$error = isset($this->data['error'])?$this->data['error']:'No data available';
 				$s .= $problem.$error.$report;
 			}
@@ -233,7 +246,9 @@
 		}
 		function json() {
 			header('Content-Type: application/javascript');
-			echo "response['".$this->current['app']."'] = ".json_encode($this->data['match']).";";
+			$s = "response['".$this->current['app']."'] = ";
+			$s .= $this->isEmpty?"[];":json_encode($this->data['match']).";";
+			echo $s;
 		}
 		function serial() {
 			echo(serialize($this->data['match']));

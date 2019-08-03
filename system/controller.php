@@ -29,6 +29,13 @@
 				);
 			}
 			header('Location: ./');
+			exit();
+		}
+
+		function linkMethod($result){
+				$link = $result['match'][0];
+				header('Location: ?group='.$link['groupLink'].'&app='.$link['appLink'].'&keyword='.urlencode($link['keywordLink']));
+				exit();
 		}
 
 		function addingSlash(){
@@ -82,7 +89,7 @@
 				  	}
 				}
 			}
-			if(isset($_POST['itemAction']) && in_array($_POST['itemAction'],array('delete','update','compose'))){
+			if(isset($_POST['itemAction']) && in_array($_POST['itemAction'],array('delete','update','compose','link'))){
 				$this->current['method'] = $_POST['itemAction'];
 				$this->current['arg'] = $_POST;
 			}
