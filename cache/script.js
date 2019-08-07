@@ -37,8 +37,10 @@ $.submitting = function(submit){
 	loop = function(i) {
 		$('#multiple').css({
 			'zoom'				:(98-i)+'%',
-			'padding'			:(2+i)+'%'
-		});	
+			'padding-top'		:(2+i)+'%',
+			'padding-left'		:(2+i)+'%',
+			'padding-right'		:(2+i)+'%'
+		});
 	},
 	stack = function(){
 		var top = $('#shell').css('top') - 10,
@@ -109,14 +111,15 @@ $.submitting = function(submit){
 		}
 	);
 };
-$.ajax = function(id,url) {
+$.ajax = function(id,url,fn) {
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
 	script.async = true;
 	script.src = url;
 	script.setAttribute('id',id);
-	var node = document.getElementsByTagName('script')[0];
-	node.parentNode.insertBefore(script, node);
+	var newElement = document.getElementsByTagName('script')[0];
+	newElement.parentNode.insertBefore(script,newElement);
+	$('#'+id).on('load',fn);
 };
 $.init.prototype = {
 	each: function(el) {
@@ -197,26 +200,31 @@ setStream = function(){
 streaming = function(){
 	var txt = '', i, prevIndex = $(selList[0]).attr('index'), pos = [5,10,80,82,84,84];
 	$('#response').destroy();
-	$.ajax('response','?group='+$('#group').val()+'&app='+$('#app').val()+'&keyword='+$('#search').val()+'&format=json&r='+Math.random());
-	if(response[app][0] !== undefined && prevStream != 0 && response[app][0]['itemKey'] != prevStream){
-		listCount = response[app].length;
-		for(i in response[app]){
-			txt = txt + "<dl onmousedown='listSelected(this);searchFocus()' index='"+i+"'>";
-			txt = txt + "<dt>"+response[app][i]['itemTitle']+"</dt>";
-			txt = txt + "<dd>"+response[app][i]['itemInfo']+"</dd>";
-			txt = txt + "</dl>";
-		}
-		$.timer(6,70,
-			function(i){
-				$('#wlis').css('margin-top',pos[i]+'px');
-			},
-			function(){
-				$('#wlis').css('margin-top','0');
-				$('#wlis').text(txt);
-				listSelected($('#wlis > dl')[prevIndex]);
+	$.ajax(
+		'response',
+		'?group='+$('#group').val()+'&app='+$('#app').val()+'&keyword='+$('#search').val()+'&format=json&r='+Math.random(),
+		function(){
+			if(prevStream != 0 && response[app][0]['itemKey'] != prevStream){
+				listCount = response[app].length;
+				for(i in response[app]){
+					txt = txt + "<dl onmousedown='listSelected(this);searchFocus()' index='"+i+"'>";
+					txt = txt + "<dt>"+response[app][i]['itemTitle']+"</dt>";
+					txt = txt + "<dd>"+response[app][i]['itemInfo']+"</dd>";
+					txt = txt + "</dl>";
+				}
+				$.timer(6,70,
+					function(i){
+						$('#wlis').css('margin-top',pos[i]+'px');
+					},
+					function(){
+						$('#wlis').css('margin-top','0');
+						$('#wlis').text(txt);
+						listSelected($('#wlis > dl')[prevIndex]);
+					}
+				);
 			}
-		);
-	}
+		}
+	);
 	prevStream = response[app][0]['itemKey'];
 	setTimeout('streaming()',3000);
 },
@@ -250,7 +258,6 @@ listSelected = function(o){
 			$('#multiple').css({'zoom':'100%','padding':'0','background-color':'transparent'});
 			$('#actForm').css('overflow','auto');
 			$('#actions > img').length > 0 && $('#actions > img').css('display','block');
-			$('')
 		}
 	}
 	else !isStacked && (listCount > 1) && $.submitting(false);
@@ -265,12 +272,13 @@ listSelected = function(o){
 		if(!!$('#'+key)[0]) {
 			if($('#'+key)[0].nodeName=="INPUT") $('#'+key).val(res[key]);
 			else {
-				var i, tmp = [], col = response[key.replace('_id','')];
+				var i, tmp = ['<option></option>'], col = response[key.replace('_id','')];
 				for(var i in col) tmp.push("<option value=\""+col[i]['itemKey']+"\" "+(res[key]==col[i]['itemKey']?'selected':'')+">"+col[i]['itemTitle']+"</option>");
 				$('#'+key).text(tmp.join(''));
 			}
 		}
 	}
+	!isPortrait && $('#backButton').css('display','none');
 },
 firstCompose = function(){
 	$('#actions > img').each(function(o){
@@ -286,9 +294,10 @@ firstCompose = function(){
 		}
 	});
 	$('#itemAction').val('compose');
-};
-
-
+},
+deleteConfirm = function(){
+	return confirm('Are you sure to delete '+selList.length+' item'+((selList.length>1)?'s':'')+'?')?true:false;
+}
 
 window.onload = function(){
 	app = $("#app").val();
@@ -310,10 +319,28 @@ document.onkeyup = function(e){
 	shifted = (e||window.event).shiftKey?!0:!!0;
 }
 document.onkeydown = function(e){
-	shifted = (e||window.event).shiftKey?!0:!!0;
-	if((e||window.event).keyCode == 27) {
+	var is = (e||window.event);
+	if(is.keyCode == 16) {
+		shifted = true;
+	}
+	else if(is.keyCode == 27) { /* escape button */
 		$('#search').val('');
 		searchFocus();
+	}
+	else if(is.keyCode == 46){ /* delete button */
+		if(
+			$(document.activeElement).attr('id') == 'search' &&
+			$('#search').val() == '' &&
+			$('#delete').length > 0 &&
+			listCount > 0 &&
+			deleteConfirm()
+		){
+			$('#itemAction').val('delete');
+			$.submitting(true);
+		}
+		else{
+			searchFocus();
+		}
 	}
 }
 $('#search').on('keydown',function(e){
@@ -356,7 +383,7 @@ $('#actions img').on('mousedown',function(){
 		$('.lis').css('display','block');
 	}
 	else if(action=='compose'){
-		$('#actForm input').each(function(obj){
+		$('.row input,.row select').each(function(obj){
 			$(obj).val('');
 		});
 		setTimeout(function(){
@@ -367,7 +394,8 @@ $('#actions img').on('mousedown',function(){
 	else{
 		if(action=='update' && $('#itemAction').val() =='compose') action = 'compose';
 		$('#itemAction').val(action);
-		if(action=='delete' && !confirm('Are you sure to delete '+selList.length+' item'+((selList.length>1)?'s':'')+'?')){
+		if(action=='delete' && !deleteConfirm()){
+			searchFocus();
 			return false;
 		}
 		$.submitting(true);

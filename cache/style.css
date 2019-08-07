@@ -118,7 +118,6 @@ a {
 }
 ::-webkit-scrollbar {display: none;}
 .scroll {
-    height: 100%;
     overflow: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
@@ -233,8 +232,17 @@ h2 {
 #wnav .waste {
     height: 100px
 }
+#actForm{
+    margin:0;
+}
+#actForm,#wlis,#wnav{
+    height:100%;
+}
 #actForm .waste {
-    height: 250px
+    height: 20px
+}
+#plis{
+    border-top:solid 1px;
 }
 #actions img {
     margin-left: 5px

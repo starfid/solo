@@ -12,6 +12,7 @@
 			$this->cacheFolder = $setting['cache'];
 			$this->current = $current;
 			$this->data = $data;
+			$this->isNotError = isset($data['error'])?false:true;
 			$this->isEmpty = isset($this->data['error']) || $this->data['count'] < 1?true:false;
 			$format = isset($_GET['format'])?$_GET['format']:NULL;
 			method_exists($this,$format)?$this->$format():$this->html();
@@ -74,8 +75,11 @@
 
 			$s .= "\n\t\t\t\t\t<img id=\"backButton\" class=\"left\" src=\"".$this->cacheFolder."/back.png\" />";
 
-			foreach(array_diff($this->current['methods'],array('primary','search')) as $methods => $method){
-				$s .= "\n\t\t\t\t\t<img title=\"".ucfirst(str_replace('update','save',$method))."\" id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";
+			if($this->isNotError){
+				asort($this->current['methods']);
+				foreach(array_diff($this->current['methods'],array('primary','search')) as $methods => $method){
+					$s .= "\n\t\t\t\t\t<img title=\"".ucfirst(str_replace('update','save',$method))."\" id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";
+				}
 			}
 
 
@@ -135,10 +139,10 @@
 
 /*
 			$s .= "\n\t\t\t\t<div id='plis' style='height:100%;' class='scroll'>";
-			$s .= "<div class=\"row\"><div class='label left'>Title</div> <div class='wrapper'><input class='actInput' value='Mencari Demokrasi' /></div></div>";
-			$s .= "<div class=\"row\"><div class='label left'>Author</div> <div class='wrapper'><input class='actInput' value='Soekarno Hatta' /></div></div>";
-			$s .= "<div class=\"row\"><div class='label left'>Publihser</div> <div class='wrapper'><input class='actInput' value='Bandung' /></div></div>";
-			$s .= "<div class=\"row\"><div class='label left'>Magterial</div> <div class='wrapper'><input class='actInput' value='type Buku' /></div></div>";
+			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Title</div> <div class='wrapper'><input class='actInput' value='Mencari Demokrasi' /></div></div>";
+			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Author</div> <div class='wrapper'><input class='actInput' value='Soekarno Hatta' /></div></div>";
+			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Publihser</div> <div class='wrapper'><input class='actInput' value='Bandung' /></div></div>";
+			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Magterial</div> <div class='wrapper'><input class='actInput' value='type Buku' /></div></div>";
 			$s .= "\n\t\t\t\t</div>\n\t\t\t";
 */
 
@@ -148,9 +152,11 @@
 
 			foreach($this->apps as $types => $type){
 				if($types == 'services') continue;
+				ksort($type);
 				foreach($type as $groups => $group){
 					$s .= "\n\t\t\t\t<li class=\"group\">".ucwords($groups)."</li>";
-					foreach($group as $apps => $app){
+					asort($group);
+					foreach($group as $app){
 						$selected = ($groups == $this->current['group'] && $app == $this->current['app'])?' id="navSelected"':'';
 						$s .= "\n\t\t\t\t\t<li".$selected."><a href=\"?group=".$groups."&amp;app=".$app."\">".ucwords(str_replace("_"," ",$app))."</a></li>";
 					}

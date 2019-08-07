@@ -1,5 +1,3 @@
-body, .act, #shell { background-color: #fafafa; } /*main background*/
-#wlis {background-color: #f9f9f9} /*list background*/
 .lis {background-color: #f3f3f3;} /*search background*/
 .selParent { background-color: #0069D9; } /*list background selected*/
 .selParent dt {color:#FEFAEE;}
@@ -16,8 +14,7 @@ dd {color: #808080}
 dt,#problem,#report {color: #333}
 #wnav li a {color: #4F424B}
 #ribbon .act {border-bottom: solid 1px #CCCCCC}
-hr {border-bottom: 1px solid #e9e9e9}
-.row {border-bottom: 1px solid #e9e9e9}
+hr, #actForm .row {border-bottom: 1px solid #e9e9e9}
 #userid strong {color: #287bd4}
 ::-webkit-input-placeholder, :-moz-placeholder,::-moz-placeholder, :-ms-input-placeholder  {color: #DFD7D7}
 #navSelected {background-color: #D4D3D4}
