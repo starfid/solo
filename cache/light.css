@@ -1,14 +1,14 @@
-body, .act, #shell, select { background-color: #fafafa; } /*main background*/
-#wlis,#plis {background-color: #f9f9f9} /*list background*/
-.lis {background-color: #f3f3f3;} /*search background*/
+body, .act, #shell, select { background-color: #DFE0E3; } /*main background*/
+#wlis,#plis {background-color: #CECED1} /*list background*/
+.nav {background-color: #C6CAD4;} /*nav background*/
+.lis {background-color: #C4C5C9;} /*search background*/
 .selParent { background-color: #0069D9; } /*list background selected*/
 .selParent dt {color:#FEFAEE;}
 .selParent dd {color:#89BEFF}
-.nav {background-color: #F6F6F6;} /*nav background*/
 #ribbon .nav, .nav {border-right: solid 1px #B6B2B1}
-#ribbon .nav { border-bottom: solid 1px #CCCCCC; }
-dl, #plis .row{border-bottom: solid 1px #e5e5e5}
-#plis {border-color:#e5e5e5}
+#ribbon .nav { border-bottom: solid 1px #BCC0CD; }
+dl, #plis .row{border-bottom: solid 1px #B8B8BC}
+#plis {border-color:#B8B8BC}
 .lis {border-right: solid 1px #d6d6d6}
 #ribbon .lis {border-bottom: solid 1px #CCCCCC}
 #ribbon .nav {color: #333}
@@ -17,7 +17,9 @@ dd {color: #808080}
 dt,#problem,#report {color: #333}
 #wnav li a {color: #4F424B}
 #ribbon .act {border-bottom: solid 1px #CCCCCC}
-hr, #actForm .row {border-bottom: 1px solid #e9e9e9}
+hr, #actForm .row {border-bottom: 1px solid #D5D5D5}
 #userid strong {color: #287bd4}
+.actInput, select {color:#4E5158}
 ::-webkit-input-placeholder, :-moz-placeholder,::-moz-placeholder, :-ms-input-placeholder  {color: #DFD7D7}
-#navSelected {background-color: #D4D3D4}
+#navSelected {background-color: #B9BDCA}
+.label{color: #999;}

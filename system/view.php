@@ -39,7 +39,6 @@
 			$currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			$searchAble = in_array('search',$this->current['methods']);
 			$disableSearch = $searchAble?'':'disabled ';
-			$placeHolder = $searchAble?'Search Here':'';
 
 			$s = "<html>";
 			$s .= "\n\t<head>";
@@ -78,7 +77,15 @@
 			if($this->isNotError){
 				asort($this->current['methods']);
 				foreach(array_diff($this->current['methods'],array('primary','search')) as $methods => $method){
-					$s .= "\n\t\t\t\t\t<img title=\"".ucfirst(str_replace('update','save',$method))."\" id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";
+					if(!($this->isEmpty && $method != 'update')){
+						$s .= "\n\t\t\t\t\t<img title=\"".ucfirst(str_replace('update','save',$method))."\" id=\"".$method."\" class=\"left\" src=\"".$this->cacheFolder."/".$method.".png\" />";
+					}
+				}
+				if(in_array('compose',$this->current['methods']) && !in_array('update',$this->current['methods'])){
+					$s .= "\n\t\t\t\t\t<img title=\"save\" id=\"save\" class=\"left\" src=\"".$this->cacheFolder."/save.png\" />";
+				}
+				if(!$this->isEmpty && count(array_diff($this->data['columns'],$predefined))==1){
+					$s .= '';
 				}
 			}
 
@@ -99,7 +106,7 @@
 
 			$s .= "\n\t\t\t\t\t<input value=\"".$this->current['group']."\" name=\"group\" id=\"group\" type=\"hidden\" />";
 			$s .= "\n\t\t\t\t\t<input value=\"".$this->current['app']."\" name=\"app\" id=\"app\" type=\"hidden\" />";
-			$s .= "\n\t\t\t\t\t<input value=\"".$keyword."\" name=\"keyword\" id=\"search\" class=\"left\" placeholder=\"".$placeHolder."\" ondblclick=\"this.value=''\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" autocapitalize=\"off\" ".$disableSearch."/>";
+			$s .= "\n\t\t\t\t\t<input value=\"".$keyword."\" name=\"keyword\" id=\"search\" class=\"left\" placeholder=\"Search Here\" ondblclick=\"this.value=''\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" autocapitalize=\"off\" ".$disableSearch."/>";
 			$s .= "\n\t\t\t\t\t<img class='right' src=\"".$this->cacheFolder."/menu.png\" id=\"menuButton\" />";
 			$s .= "\n\t\t\t\t</form>";
 			$s .= "\n\t\t\t</div>";
@@ -131,6 +138,10 @@
 			
 				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemAction\" value=\"\" id=\"itemAction\" />";
 				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"selIndex\" value=\"0\" id=\"selIndex\" />";
+				if(in_array('search',$this->current['methods'])){
+					$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemSearch\" id=\"itemSearch\" value=\"".$keyword."\" />";
+				}
+
 			}
 
 			$s .= "\n\t\t\t\t\t<div class=\"waste\"></div>";
@@ -170,7 +181,6 @@
 			$s .= "\n\t\t\t\t\t<li><a title='Set data refresh automatically on-off' onmousedown='setStream()' href='".$currentURL."'>Set Stream ".ucwords($stream)."</a></li>";
 			$s .= "\n\t\t\t\t\t<li id='navlogin'><a href='login'>".($this->auth['username']=='guest'?'Login':'Log Out')."</a></li>";
 
-
 			$s .= "\n\t\t\t\t\t<li class=\"waste\"></li>";
 			$s .= "\n\t\t\t\t</ul>";
 			$s .= "\n\t\t\t</div>";
@@ -181,8 +191,11 @@
 			$report = "</div>";
 
 			if($this->isEmpty && isset($_GET['keyword']) && in_array('search',$this->current['methods'])) {
-				$error = isset($this->data['error'])?$this->data['error']:'No results were found. Make sure keyword are spelled correctly or try different keywords';
+				$error = isset($this->data['error'])?$this->data['error']:'No results were found.<br />Try different keyword';
 				$s .= $problem.$error.$report;
+			}
+			elseif($this->isEmpty && in_array('search',$this->current['methods'])) {
+				$s .= $problem.'No data available.<br />Please search'.$report;
 			}
 			elseif($this->isEmpty) {
 				$error = isset($this->data['error'])?$this->data['error']:'No data available';

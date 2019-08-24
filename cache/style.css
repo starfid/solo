@@ -60,10 +60,13 @@ select {
     border: none
 }
 select {
-    line-height: 22px;
+    line-height: 20px;
     font-size: 16px;
     -webkit-appearance: none;
     -moz-appearance: none
+}
+@-moz-document url-prefix() {
+    xselect {line-height: 19px;}
 }
 #search,
 .group {
@@ -268,7 +271,6 @@ hr {
 }
 .label {
     line-height: 22px;
-    color: #999;
     margin-right: 9px
 }
 .actInput {
@@ -287,9 +289,7 @@ dl{border-bottom: solid 1px;}
 
 @media screen and (min-color-index: 0)and(-webkit-min-device-pixel-ratio: 0) {
     @media {
-        .label {
-            line-height: 27px
-        }
+        xx.label {line-height: 27px}
     }
 }
 @media (orientation:portrait),(max-width: 768px) {

@@ -4,6 +4,10 @@
 		function primary();
 	}
 
+	interface POS {
+		function pos($arg);
+	}
+
 	interface Search {
 		function search($arg);
 	}

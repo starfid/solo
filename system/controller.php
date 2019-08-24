@@ -20,7 +20,7 @@
 		}
 
 		function authentication($result){
-			if($result['count'] == 1){
+			if(array_key_exists('count',$result) && $result['count'] == 1){
 				$_SESSION[$this->token]['auth'] = array(
 					'type' => $_POST['type'],
 					'username' => $_POST['username'],
@@ -107,10 +107,17 @@
 					'group' => 'user',
 					'app' => $_POST['type'],
 					'method' => 'search',
-					'arg' => $_POST['username'].md5($_POST['password'])
+					'arg' => $_POST['username'].$this->passwordMethod($_POST['password'])
+
 				);
 			}
 
+		}
+
+		function passwordMethod($password){
+			return '';
+			//return md5($password);
+			//return password_hash($password, PASSWORD_BCRYPT);
 		}
 
 		function availMethods(){
