@@ -104,7 +104,7 @@
 				$this->current = array(
 					'type' => 'admin',
 					'appType' => 'admin',
-					'group' => 'user',
+					'group' => 'accounts',
 					'app' => $_POST['type'],
 					'method' => 'search',
 					'arg' => $_POST['username'].$this->passwordMethod($_POST['password'])
@@ -130,8 +130,8 @@
 		}
 
 		function pathCheck(){
-			if(!isset($_SESSION[$this->token]['apps']['admin']['user']) || !in_array('admin',$_SESSION[$this->token]['apps']['admin']['user'])) {
-				echo 'admin/user/admin.php in application folder is not found'; exit();
+			if(!isset($_SESSION[$this->token]['apps']['admin']['accounts']) || !in_array('admin',$_SESSION[$this->token]['apps']['admin']['accounts'])) {
+				echo 'admin/accounts/admin.php in application folder is not found'; exit();
 			}
 			elseif(!isset($_SESSION[$this->token]['apps']['guest'])){
 				echo 'guest is not found in application folder'; exit();
