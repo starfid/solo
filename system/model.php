@@ -27,7 +27,11 @@
 			}
 
 			//run primary or search after post
-			if(in_array($currentMethod,array('compose','update','delete'))){
+			if(isset($this->result['error'])){
+				//echo $this->result['error'];
+				//exit();
+			}
+			if(in_array($currentMethod,array('compose','update','delete')) && !isset($this->result['error'])){
 				if(in_array('search',$availMethods) && isset($_GET['keyword']) && strlen($_GET['keyword'])>2){
 					$this->search(stripslashes($_GET['keyword']))->query($current,$token);
 				}

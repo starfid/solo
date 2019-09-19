@@ -194,9 +194,6 @@
 				$error = isset($this->data['error'])?$this->data['error']:'No results were found.<br />Try different keyword';
 				$s .= $problem.$error.$report;
 			}
-			elseif($this->isEmpty && in_array('search',$this->current['methods'])) {
-				$s .= $problem.'No data available.<br />Please search'.$report;
-			}
 			elseif($this->isEmpty) {
 				$error = isset($this->data['error'])?$this->data['error']:'No data available';
 				$s .= $problem.$error.$report;
