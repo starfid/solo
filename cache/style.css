@@ -85,18 +85,18 @@ a {
     -ms-user-select: none;
     user-select: none
 }
-.nav {
-    width: 250px;
-}
-.lis {
-    width: 380px;
-}
 .act {
     width: 100%;
-    margin-left: -632px
+    margin-left: -50%;
+}
+.nav {
+    width: 19.73%;
+}
+.lis {
+    width: 30%;
 }
 .actw {
-    margin-left: 632px
+    margin-left: 50%
 }
 .pad {
     margin: 14px 10px;
@@ -105,8 +105,7 @@ a {
 .nav .pad {
     font-size:16px!important;
 }
-#backButton{display:none}
-#menuButton,
+#menuButton, #backButton{display:none}
 #save,
 #userid img {
     display: block
@@ -148,7 +147,7 @@ hr {
 #view .act,
 #view .lis,
 #view .nav {
-    height: 94%;
+    height: 95%;
     overflow: hidden
 }
 #search {
@@ -284,6 +283,7 @@ dl{border-bottom: solid 1px;}
         xx.label {line-height: 27px}
     }
 }
+
 @media (orientation:portrait),(max-width: 768px) {
     .act,.actw {margin-left:0}
     #wlis,.act,.lis,.nav {width: 100%}

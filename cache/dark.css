@@ -1,5 +1,5 @@
-body, .act, #shell, select, #actForm {background-color: #1E1F23; } /*main background*/
-#wlis,#plis {background-color: #333437} /*list background*/
+body, .act, .actw, #wlis,#plis {background-color:#333437;} /*background for right header and middle content*/
+#shell, select, #actForm {background-color: #1E1F23; } /*background for right content */
 .lis {background-color: #3E3F43;} /*search background*/
 .selParent {background-color: #2069A1; } /*list background selected*/
 .selParent dt {color:#EEEEEE;}
@@ -13,7 +13,8 @@ dl span {color:white}
 .actInput, select {color:#7E828F}
 #navSelected {background-color: #3F4452}
 #report:active {background-color:#303134}
-#ribbon .act, .lis {border-color: #1A1A1B}
+#ribbon .act {border-color:#333437}
+.lis {border-color: #1A1A1B}
 dl, #plis .row {border-color: #38393D;}
 #plis {border-color:#454648;}
 #ribbon .nav {border-bottom-color: #3D414E; border-right-color: #333437; }

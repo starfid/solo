@@ -1,5 +1,5 @@
-body, .act, #shell, select { background-color: #DFE0E3; } /*main background*/
-#wlis,#plis {background-color: #CECED1} /*list background*/
+body, .act, .actw, #wlis,#plis {background-color:#CECED1;} /*background for right header and middle content*/
+#shell, select, #actForm {background-color: #DFE0E3; } /*background for right content */
 .nav {background-color: #C6CAD4;} /*nav background*/
 .lis {background-color: #C4C5C9;} /*search background*/
 .selParent { background-color: #0069D9; } /*list background selected*/
