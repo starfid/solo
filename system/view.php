@@ -128,7 +128,8 @@
 							$s .= "\n\t\t\t\t\t\t\t<select id=\"".$column."\" name=\"".$column."\"></select>";
 						}
 						else{
-							$s .= "\n\t\t\t\t\t\t\t<input type=\"text\" class=\"actInput\" id=\"".$column."\" name=\"".$column."\" value=\"\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" />";
+							$type = substr($column,-5)=='_date'?'date':'text';
+							$s .= "\n\t\t\t\t\t\t\t<input type=\"".$type."\" class=\"actInput\" id=\"".$column."\" name=\"".$column."\" value=\"\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" />";
 						}
 
 						$s .= "\n\t\t\t\t\t\t</div>";
