@@ -178,7 +178,7 @@
 			$s .= "\n\t\t\t\t<li class='group'>Options</li>";
 			$s .= "\n\t\t\t\t\t<li><a title='Set background dimmer or lighter' onmousedown='setScheme()' href='".$currentURL."'>Turn ".ucwords($scheme)."</a></li>";
 			$s .= "\n\t\t\t\t\t<li><a title='Set data refresh automatically on-off' onmousedown='setStream()' href='".$currentURL."'>Stream ".ucwords($stream)."</a></li>";
-			$s .= "\n\t\t\t\t\t<li id='navlogin'><a href='login'>".($this->auth['username']=='guest'?'Login':'Log Out')."</a></li>";
+			$s .= "\n\t\t\t\t\t<li id='navlogin'><a href='".$this->loginFolder."'>".($this->auth['username']=='guest'?'Login':'Log Out')."</a></li>";
 
 			$s .= "\n\t\t\t\t\t<li class=\"waste\"></li>";
 			$s .= "\n\t\t\t\t</ul>";
