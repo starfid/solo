@@ -10,6 +10,7 @@
 
 			$this->meta = $setting;
 			$this->cacheFolder = $setting['cache'];
+			$this->loginFolder = $setting['login'];
 			$this->current = $current;
 			$this->data = $data;
 			$this->isNotError = isset($data['error'])?false:true;
@@ -91,7 +92,7 @@
 
 
 			$s .= "\n\t\t\t\t</div>";
-			$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onmousedown=\"document.location='login/?log=out'\">";
+			$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onmousedown=\"document.location='".$this->loginFolder."/?log=out'\">";
 
 			$s .= "\n\t\t\t\t\t<strong class=\"left\">".ucwords($this->auth['username'])."</strong>";
 
@@ -114,7 +115,7 @@
 			$s .= "\n\t\t<div id=\"view\" class=\"both\">";
 			$s .= "\n\t\t\t<div class=\"right act\"><div class=\"actw both\"><div id=\"multiple\"><div id=\"shell\">";
 
-			$s .= "\n\t\t\t\t<form style='height:100%' method=\"post\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."".$keywordURL."\" id=\"actForm\" class=\"scroll\">";
+			$s .= "\n\t\t\t\t<form method=\"post\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."".$keywordURL."\" id=\"actForm\" class=\"scroll\">";
 
 			if(isset($this->data['columns'])) {
 				foreach($this->data['columns'] as $column){
@@ -149,16 +150,13 @@
 			$s .= "\n\t\t\t\t</form>";
 			$s .= "\n\t\t\t</div></div>";
 
-/*
-			$s .= "\n\t\t\t\t<div id='plis' style='height:100%;' class='scroll'>";
-			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Title</div> <div class='wrapper'><input class='actInput' value='Mencari Demokrasi' /></div></div>";
-			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Author</div> <div class='wrapper'><input class='actInput' value='Soekarno Hatta' /></div></div>";
-			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Publihser</div> <div class='wrapper'><input class='actInput' value='Bandung' /></div></div>";
-			$s .= "\n\t\t\t\t\t<div class=\"row\"><div class='label left'>Magterial</div> <div class='wrapper'><input class='actInput' value='type Buku' /></div></div>";
-			$s .= "\n\t\t\t\t</div>\n\t\t\t";
-*/
+			$s .= "\n\t\t\t\t<div id='plis' class='scroll'>";
+			$s .= "\n\t\t\t\t\t<div id='pinAct'><span>Close</span></div>";
+			$s .= "\n\t\t\t\t\t<div id='pinned'></div>";
+			$s .= "\n\t\t\t\t</div>";
 
-			$s .= "</div></div>";
+
+			$s .= "\n\t\t\t</div></div>";
 			$s .= "\n\t\t\t<div class=\"left nav\">";
 			$s .= "\n\t\t\t\t<ul class=\"scroll\" id=\"wnav\">";
 
@@ -179,7 +177,7 @@
 			$stream = $stream=='off'?'on':'off';
 			$s .= "\n\t\t\t\t<li class='group'>Options</li>";
 			$s .= "\n\t\t\t\t\t<li><a title='Set background dimmer or lighter' onmousedown='setScheme()' href='".$currentURL."'>Turn ".ucwords($scheme)."</a></li>";
-			$s .= "\n\t\t\t\t\t<li><a title='Set data refresh automatically on-off' onmousedown='setStream()' href='".$currentURL."'>Set Stream ".ucwords($stream)."</a></li>";
+			$s .= "\n\t\t\t\t\t<li><a title='Set data refresh automatically on-off' onmousedown='setStream()' href='".$currentURL."'>Stream ".ucwords($stream)."</a></li>";
 			$s .= "\n\t\t\t\t\t<li id='navlogin'><a href='login'>".($this->auth['username']=='guest'?'Login':'Log Out')."</a></li>";
 
 			$s .= "\n\t\t\t\t\t<li class=\"waste\"></li>";
