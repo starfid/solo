@@ -150,9 +150,9 @@
 			$s .= "\n\t\t\t\t</form>";
 			$s .= "\n\t\t\t</div></div>";
 
-			$s .= "\n\t\t\t\t<div id='plis' class='scroll'>";
+			$s .= "\n\t\t\t\t<div id='plis'>";
 			$s .= "\n\t\t\t\t\t<div id='pinAct'><span>Close</span></div>";
-			$s .= "\n\t\t\t\t\t<div id='pinned'></div>";
+			$s .= "\n\t\t\t\t\t<div id='pinned' class='scroll'></div>";
 			$s .= "\n\t\t\t\t</div>";
 
 
