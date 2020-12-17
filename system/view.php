@@ -10,7 +10,6 @@
 
 			$this->meta = $setting;
 			$this->cacheFolder = $setting['cache'];
-			$this->loginFolder = $setting['login'];
 			$this->current = $current;
 			$this->data = $data;
 			$this->isNotError = isset($data['error'])?false:true;
@@ -19,11 +18,18 @@
 			method_exists($this,$format)?$this->$format():$this->html();
 		}
 
+		function single() {
+			return $this->html('single');
+		}
+		function dual() {
+			return $this->html('dual');
+		}
+		
 
-		function html(){
+		function html($specialView = 'normal'){
 			$keyword = in_array('search',$this->current['methods']) && isset($_GET['keyword']) && strlen(trim($_GET['keyword'])) > 2?stripslashes(stripslashes(stripslashes(trim($_GET['keyword'])))):"";
 			$keywordURL = empty($keyword)?'':'&keyword='.$keyword;
-			$predefined = array('itemTitle','itemInfo','itemKey','itemRank','itemChartLabel','itemChartNumber');
+			$predefined = array('itemTitle','itemInfo','itemKey','itemRank','itemChartLabel','itemChartNumber','itemFlag');
 			$settings = Array();
 			$services = array();
 			$scheme = isset($_COOKIE['scheme'])?$_COOKIE['scheme']:'dark';
@@ -41,7 +47,8 @@
 			$searchAble = in_array('search',$this->current['methods']);
 			$disableSearch = $searchAble?'':'disabled ';
 
-			$s = "<html>";
+			$s = "";
+			$s .= "<html lang='en'>";
 			$s .= "\n\t<head>";
 			$s .= "\n\t\t<title>".$title."</title>";
 			$s .= "\n\t\t<link rel=\"apple-touch-icon\" href=\"".$this->cacheFolder."/normal.png\" />";
@@ -51,17 +58,21 @@
 			$s .= "\n\t\t<link rel=\"apple-touch-startup-image\" href=\"".$this->cacheFolder."/normal.png\" />";
 			$s .= "\n\t\t<link href=\"".$this->cacheFolder."/favc.ico\" rel=\"icon\" type=\"image/x-icon\" />";
 			$s .= "\n\t\t<link href=\"".$this->cacheFolder."/style.css\" rel=\"stylesheet\" type=\"text/css\" />";
-			$s .= "\n\t\t<link href=\"".$this->cacheFolder."/".$scheme.".css\" rel=\"stylesheet\" type=\"text/css\" />";
+
 			$s .= "\n\t\t<meta name=\"description\" content=\"".$this->meta['desc']."\" />";
 			$s .= "\n\t\t<meta name=\"keyword\" content=\"".$this->meta['keyword']."\" />";
 			$s .= "\n\t\t<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />";
+
+			$s .= "\n\t\t<meta name=\"apple-mobile-web-app-status-bar-style\" content=\"default\" />";
+
 			$s .= "\n\t\t<meta name=\"viewport\" content=\"user-scalable=no, width=device-width\" />";
 			$s .= "\n\t\t<meta name=\"viewport\" content=\"minimum-scale=1.0,width=device-width,maximum-scale=1,user-scalable=no\" />";
 			$s .= "\n\t\t<meta name=\"google\" content=\"notranslate\" />";
 			$s .= "\n\t\t<meta name=\"google\" value=\"notranslate\" />";
+
 			$s .= "\n\t\t<meta name=\"theme-color\" content=\"#353944\" />";
 			$s .= "\n\t\t<meta name=\"format-detection\" content=\"telephone=no\">";
-			$s .= "\n\t\t<meta content=\"text/html;charset=iso-8859-1\" http-equiv=\"Content-Type\" />";
+			$s .= "\n\t\t<meta content=\"text/html;charset=UTF-8\" http-equiv=\"Content-Type\" />";
 			$s .= "\n\t\t<meta property=\"og:url\" content=\"".$currentURL."/\" />";
 			$s .= "\n\t\t<meta property=\"og:type\" content=\"article\" />";
 			$s .= "\n\t\t<meta property=\"og:title\" content=\"".$title."\" />";
@@ -69,7 +80,10 @@
 			$s .= "\n\t\t<meta property=\"og:image\" content=\"preview.jpg\" itemprop=\"image\" />";
 			$s .= "\n\t</head>";
 			$s .= "\n\t<body>";
-			$s .= "\n\t\t<div id=\"ribbon\" class=\"both\">";
+
+			$showRibbon = $specialView!='normal'?" style='display:none'":"";
+
+			$s .= "\n\t\t<div id=\"ribbon\" class=\"landing\"".$showRibbon.">";
 			$s .= "\n\t\t\t<div class=\"right act\"><div class=\"actw both\">";
 			$s .= "\n\t\t\t\t<div class=\"left\" id=\"actions\">";
 
@@ -92,27 +106,56 @@
 
 
 			$s .= "\n\t\t\t\t</div>";
-			$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onmousedown=\"document.location='".$this->loginFolder."/?log=out'\">";
+
+			if($this->auth['type']=='guest'){
+				$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onclick=\"logForm()\">";
+			}
+			else {
+				$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onclick=\"document.location='?log=out'\">";
+			}
 
 			$s .= "\n\t\t\t\t\t<strong class=\"left\">".ucwords($this->auth['username'])."</strong>";
 
 			$s .= "\n\t\t\t\t</div>";
 			$s .= "\n\t\t\t</div></div>";
 			$s .= "\n\t\t\t<div class=\"left nav\">";
-			$s .= "\n\t\t\t\t<strong class=\"pad\">".strtoupper($this->meta['label'])."</strong>";
+
+			$s .= "\n\t\t\t<div id='header'>";
+			$s .= "\n\t\t\t\t<div class='left pad'>".strtoupper($this->meta['label'])."</div>";
+			$s .= "\n\t\t\t\t<img class='right' src=\"".$this->cacheFolder."/back.png\" />";
+			$s .= "\n\t\t\t</div>";
+			
+//			$s .= "\n\t\t\t\t<strong class=\"pad\">".strtoupper($this->meta['label'])."</strong>";
+			
 			$s .= "\n\t\t\t</div>";
 			$s .= "\n\t\t\t<div class=\"right lis\">";
 			$s .= "\n\t\t\t\t<form method=\"search\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."".$keywordURL."\" class=\"both\">";
-			$s .= "\n\t\t\t\t\t<img id=\"magnify\" class=\"left\" src=\"".$this->cacheFolder."/magnify.png\" />";
+			
+			if(in_array('search',$this->current['methods'])){
+				$s .= "\n\t\t\t\t\t<img id=\"magnify\" class=\"left\" src=\"".$this->cacheFolder."/magnify.png\" />";
+			}
 
 			$s .= "\n\t\t\t\t\t<input value=\"".$this->current['group']."\" name=\"group\" id=\"group\" type=\"hidden\" />";
 			$s .= "\n\t\t\t\t\t<input value=\"".$this->current['app']."\" name=\"app\" id=\"app\" type=\"hidden\" />";
-			$s .= "\n\t\t\t\t\t<input value=\"".$keyword."\" name=\"keyword\" id=\"search\" class=\"left\" placeholder=\"Search Here\" ondblclick=\"this.value=''\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" autocapitalize=\"off\" ".$disableSearch."/>";
+
+			if(in_array('compose',$this->current['methods'])){
+				$s .= "\n\t\t\t\t\t<img title=\"Compose\" id=\"mobileCompose\" class=\"right\" src=\"".$this->cacheFolder."/mobilecompose.png\" />";
+			}
+
 			$s .= "\n\t\t\t\t\t<img class='right' src=\"".$this->cacheFolder."/menu.png\" id=\"menuButton\" />";
+			if(in_array('search',$this->current['methods'])){
+				$s .= "\n\t\t\t\t\t<input value=\"".$keyword."\" name=\"keyword\" id=\"search\" class=\"left\" placeholder=\"Search Here\" ondblclick=\"this.value=''\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\" autocapitalize=\"off\" ".$disableSearch."/>";
+			}
+			
 			$s .= "\n\t\t\t\t</form>";
 			$s .= "\n\t\t\t</div>";
 			$s .= "\n\t\t</div>";
-			$s .= "\n\t\t<div id=\"view\" class=\"both\">";
+
+			//ribbon end here
+
+			$singleView = $specialView=='single'?" tv":"";
+
+			$s .= "\n\t\t<div id=\"view\" class=\"both".$singleView."\">";
 			$s .= "\n\t\t\t<div class=\"right act\"><div class=\"actw both\"><div id=\"multiple\"><div id=\"shell\">";
 
 			$s .= "\n\t\t\t\t<form method=\"post\" action=\"?group=".$this->current['group']."&app=".$this->current['app']."".$keywordURL."\" id=\"actForm\" class=\"scroll\">";
@@ -137,9 +180,13 @@
 						$s .= "\n\t\t\t\t\t</div>";						
 					}
 				}
+
+				if(in_array('itemChartLabel',$this->data['columns']) && in_array('itemChartNumber',$this->data['columns']) ){
+					$s .= "<div id=\"lineChart\"><img width=\"100%\" src=\"?group=".$this->current['group']."&app=".$this->current['app']."&keyword=".$keyword."&format=linechart\" /></div>";
+				}
 			
 				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemAction\" value=\"\" id=\"itemAction\" />";
-				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"selIndex\" value=\"0\" id=\"selIndex\" />";
+				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"selIndex\" value=\"".$this->current['selIndex']."\" id=\"selIndex\" />";
 				if(in_array('search',$this->current['methods'])){
 					$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemSearch\" id=\"itemSearch\" value=\"".$keyword."\" />";
 				}
@@ -168,17 +215,22 @@
 					asort($group);
 					foreach($group as $app){
 						$selected = ($groups == $this->current['group'] && $app == $this->current['app'])?' id="navSelected"':'';
-						$s .= "\n\t\t\t\t\t<li".$selected."><a href=\"?group=".$groups."&amp;app=".$app."\">".ucwords(str_replace("_"," ",$app))."</a></li>";
+						$s .= "\n\t\t\t\t\t<li".$selected."><a class='links' href=\"?group=".$groups."&amp;app=".$app."\">".ucwords(str_replace("_"," ",$app))."</a></li>";
 					}
 				}
 			}
 
-			$scheme = $scheme=='dark'?'light':'dark';
+
 			$stream = $stream=='off'?'on':'off';
 			$s .= "\n\t\t\t\t<li class='group'>Options</li>";
-			$s .= "\n\t\t\t\t\t<li><a title='Set background dimmer or lighter' onmousedown='setScheme()' href='".$currentURL."'>Turn ".ucwords($scheme)."</a></li>";
-			$s .= "\n\t\t\t\t\t<li><a title='Set data refresh automatically on-off' onmousedown='setStream()' href='".$currentURL."'>Stream ".ucwords($stream)."</a></li>";
-			$s .= "\n\t\t\t\t\t<li id='navlogin'><a href='".$this->loginFolder."'>".($this->auth['username']=='guest'?'Login':'Log Out')."</a></li>";
+			$s .= "\n\t\t\t\t\t<li><a class='options' title='Set data refresh automatically on-off' onmousedown='setStream()' href='".$currentURL."'>Stream ".ucwords($stream)."</a></li>";
+
+			if($this->auth['type']=='guest'){
+				$s .= "\n\t\t\t\t\t<li class='options' id='navlogin' onmousedown=\"logForm()\"><a href=\"#\">Login</a></li>";
+			}
+			else {
+				$s .= "\n\t\t\t\t\t<li class='options' id='navlogin'><a href=\"?log=out\">Logout</a></li>";
+			}
 
 			$s .= "\n\t\t\t\t\t<li class=\"waste\"></li>";
 			$s .= "\n\t\t\t\t</ul>";
@@ -211,8 +263,10 @@
 			}
 			else {
 				for($i=0;$i<$this->data['count'];$i++) {
-					$selParent = $i==$selIndex?" class=\"selParent\"":"";
-					$s .= "\n\t\t\t\t\t<dl index=\"".$i."\"".$selParent." data-key=\"".$this->data['match'][$i]['itemKey']."\">";
+
+					$flag = array_key_exists('itemFlag',$this->data['match'][$i]) && $this->data['match'][$i]['itemFlag'] == 'true'?"class='flag'":"";
+
+					$s .= "\n\t\t\t\t\t<dl index=\"".$i."\" ".$flag." data-key=\"".$this->data['match'][$i]['itemKey']."\">";
 					$s .= "\n\t\t\t\t\t\t<dt>".$this->highlight($this->data['match'][$i]['itemTitle'])."</dt>";
 					$s .= "\n\t\t\t\t\t\t<dd>".$this->highlight($this->data['match'][$i]['itemInfo'])."</dd>";
 					$s .= "\n\t\t\t\t\t</dl>";
@@ -282,6 +336,66 @@
 				}
 			}
 			return stripslashes($string);
+		}
+
+		private function link() {
+			$group = "group=".$this->data[0]['groupLink'];
+			$app = "&app=".$this->data[0]['appLink'];
+			$search = isset($this->data[0]['searchLink'])?"&search=".urlencode($this->data[0]['searchLink']):"";
+			header("Location: ?".$group.$app.$search);		
+		}
+
+		function linechart(){
+			if($this->data['count']<1) return false;
+			if(!(in_array('itemChartLabel',$this->data['columns']) && in_array('itemChartNumber',$this->data['columns']))) return false;
+
+			$ay = array();
+			$al = array();
+			foreach($this->data['match'] as $rows => $row){
+				$ay[] = $row['itemChartLabel'];
+				$al[] = $row['itemChartNumber'];
+			}
+
+			$al = array_reverse($al);
+			$ay = array_reverse($ay);
+
+			$gl = $al;
+			$gy = $ay;
+
+			$mx = max($al);
+			foreach($gl as $qs) {
+				$pr = ($qs*100)/$mx;
+				$gr[] = $qs.".".floor($pr);
+			}
+			header ("Content-type: image/png");
+
+			$x_gap = 1390/count($gl);
+
+			$x_max=1300; //width canvas		
+			$y_max=291; //height canvas
+
+			$im = @ImageCreate($x_max, $y_max);
+			$background_color = ImageColorAllocate($im,250,250,250);
+			$cx = explode(",","43,145,227");
+			$cy = explode(",","50,50,50");
+			$line_color1 = ImageColorAllocate($im,$cx[0],$cx[1],$cx[2]);
+			$text_color1 = ImageColorAllocate($im,100,100,100);
+			imagesetthickness($im, 4);
+			$x1=0; $y1=0; $z1 = 0; $first_one="yes"; $prev = 0; $z2 = 0;
+			
+			for($i=0;$i<count($gr);$i++) {
+				$nd = explode(".",$gr[$i]);
+				$x2 = ($first_one=="no")?$x1+$x_gap:$x1+4;
+				$y2=$y_max-(($nd[1]*1)+16);
+				$next = ($i+1)==count($gl)?$gl[$i]:$gl[$i+1];
+				$gyi = ($gl[$i] > $next && $gl[$i] > $prev)?$y2-12:$y2+6;
+				ImageString($im,8,$x2-4,$gyi-4,$gy[$i],$text_color1);
+				if($first_one=="no"){ imageline($im,$x1,$y1,$x2,$y2,$line_color1); }
+				$x1=$x2; $y1=$y2; $z1=$z2;
+				$first_one="no"; $prev = $gl[$i];
+			}
+			ImagePNG($im);
+			return(false);
 		}
 
 	}

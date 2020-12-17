@@ -1,10 +1,11 @@
-<?php	
+<?php
 
 	class Controller {
 		private $token, $appFolder, $priviledge;
 		public $loginSubmitted, $current = array();
 
 		function __construct($setting){
+			$this->current['selIndex'] = 0;
 			$this->appFolder = $setting['folder']['apps'];
 			$this->token = $setting['personal']['token'];
 			$this->priviledge = $setting['priv'];
@@ -92,13 +93,17 @@
 			if(isset($_POST['itemAction']) && in_array($_POST['itemAction'],array('delete','update','compose','link'))){
 				$this->current['method'] = $_POST['itemAction'];
 				$this->current['arg'] = $_POST;
+				if(isset($_POST['selIndex']) && !empty($_POST['selIndex']) && is_numeric($_POST['selIndex'])){
+					$this->current['selIndex'] = $_POST['selIndex'];
+				}
+				$_SESSION[$this->token]['auth']['start'] = time();
 			}
 			elseif(
 				isset($_GET['keyword']) && !empty($_GET['keyword']) &&
 				((!is_numeric($_GET['keyword']) && strlen($_GET['keyword']) > 2) || is_numeric($_GET['keyword']))
 			) {
 				$this->current['method'] = 'search';
-				$this->current['arg'] = addslashes($_GET['keyword']);
+				$this->current['arg'] = addslashes(trim($_GET['keyword']));
 			}
 			elseif($this->loginSubmitted){
 				$this->current = array(
@@ -108,15 +113,13 @@
 					'app' => $_POST['type'],
 					'method' => 'search',
 					'arg' => $_POST['username'].$this->passwordMethod($_POST['password'])
-
 				);
 			}
-
 		}
 
 		function passwordMethod($password){
-			return '';
-			//return md5($password);
+			//return '';
+			return md5($password);
 			//return password_hash($password, PASSWORD_BCRYPT);
 		}
 
@@ -149,8 +152,12 @@
 
 		function expiration($minute){
 			if(
-				isset($_SESSION[$this->token]['auth']) &&
-				(time() - $_SESSION[$this->token]['auth']['start'])/60 > $minute
+				(
+					isset($_SESSION[$this->token]['auth']) &&
+					(time() - $_SESSION[$this->token]['auth']['start'])/60 > $minute
+				)
+				||
+				(isset($_GET['log']) && $_GET['log'] == 'out')
 			){
 				unset($_SESSION[$this->token]);
 				header('Location: ./');
