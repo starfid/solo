@@ -20,8 +20,7 @@
 		'folder'	=> array(
 			'system'	=> 'system',
 			'apps'		=> 'apps',
-			'cache'		=> 'cache',
-			'login'		=> 'login'
+			'cache'		=> 'cache'
 		),
 		'priv'		=> array(
 			'admin'		=> array('admin','services'),
