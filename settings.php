@@ -28,5 +28,7 @@
 			'member'	=> array('member','services'),
 			'guest'		=> array('guest','services')
 		),
-		'timezone'	=> 'Asia/Jakarta'
+		'timezone'	=> 'Asia/Jakarta',
+		'developing'	=> true,
+		'minimizeHTML'	=> false,
 	);
