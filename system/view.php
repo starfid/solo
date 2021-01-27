@@ -1,15 +1,18 @@
 <?php
 	class View {
-		private $auth, $apps, $cacheFolder, $meta, $current, $data;
+		private $auth, $apps, $cacheFolder, $meta, $minimizeHTML, $developing, $current, $data;
 
+		//function __construct($setting, $current, $data){
 		function __construct($setting, $current, $data){
 			$this->apps = $current['apps'];
-			$this->auth = isset($_SESSION[$setting['token']]['auth'])?
-				$_SESSION[$setting['token']]['auth']:
+			$this->meta = $setting['personal'];
+			$this->auth = isset($_SESSION[$this->meta['token']]['auth'])?
+				$_SESSION[$this->meta['token']]['auth']:
 				array('type'=>'guest','username'=>'guest','ip'=>$_SERVER['REMOTE_ADDR']);
 
-			$this->meta = $setting;
-			$this->cacheFolder = $setting['cache'];
+			$this->cacheFolder = $setting['folder']['cache'];
+			$this->minimizeHTML = $setting['minimizeHTML'];
+			$this->developing = $setting['developing'];
 			$this->current = $current;
 			$this->data = $data;
 			$this->isNotError = isset($data['error'])?false:true;
@@ -27,6 +30,7 @@
 		
 
 		function html($specialView = 'normal'){
+			$random = $this->developing?"?r=".rand():"";
 			$keyword = in_array('search',$this->current['methods']) && isset($_GET['keyword']) && strlen(trim($_GET['keyword'])) > 2?stripslashes(stripslashes(stripslashes(trim($_GET['keyword'])))):"";
 			$keywordURL = empty($keyword)?'':'&keyword='.$keyword;
 			$predefined = array('itemTitle','itemInfo','itemKey','itemRank','itemChartLabel','itemChartNumber','itemFlag');
@@ -57,7 +61,7 @@
 			$s .= "\n\t\t<link rel=\"apple-touch-icon\" sizes=\"152x152\" href=\"".$this->cacheFolder."/152.png\" />";
 			$s .= "\n\t\t<link rel=\"apple-touch-startup-image\" href=\"".$this->cacheFolder."/normal.png\" />";
 			$s .= "\n\t\t<link href=\"".$this->cacheFolder."/favc.ico\" rel=\"icon\" type=\"image/x-icon\" />";
-			$s .= "\n\t\t<link href=\"".$this->cacheFolder."/style.css\" rel=\"stylesheet\" type=\"text/css\" />";
+			$s .= "\n\t\t<link href=\"".$this->cacheFolder."/style.css".$random."\" rel=\"stylesheet\" type=\"text/css\" />";
 
 			$s .= "\n\t\t<meta name=\"description\" content=\"".$this->meta['desc']."\" />";
 			$s .= "\n\t\t<meta name=\"keyword\" content=\"".$this->meta['keyword']."\" />";
@@ -294,8 +298,8 @@
 
 			}
 
-			$s .= "<script type='text/javascript' src='".$this->cacheFolder."/script.js'></script>";
-			//echo preg_replace('/[\r\n|\n|\t]+/', '', $s);
+			$s .= "<script type='text/javascript' src='".$this->cacheFolder."/script.js".$random."'></script>";
+			$s = $this->minimizeHTML?preg_replace('/[\r\n|\n|\t]+/', '', $s):$s;
 			echo $s;
 		}
 		function xml() {
