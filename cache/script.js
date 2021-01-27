@@ -57,7 +57,8 @@ $.init.prototype = {
 	append: function(param) {
 		var el = document.createElement(param.element||'div');
 		param.hasOwnProperty('element') && delete param.element;
-		el.innerHTML = param.hasOwnProperty('text')?param.text:'';
+		//el.innerHTML = param.hasOwnProperty('text')?param.text:'';
+		if(param.hasOwnProperty('text')) el.innerHTML = param.text; delete param.text;
 		this[0].appendChild(el);
 		for(var i in param) el.setAttribute(i,param[i]);
 	},
@@ -464,7 +465,7 @@ sideButton = function(side){
 		'element':'div',
 		'id':'side'
 	});
-	if(screenWidth > 768) return;
+	if(screenWidth > 768 || $('#itemAction').val() == 'compose') return;
 	$('#side').css({
 		'position':'absolute',
 		'z-index':2,
@@ -588,9 +589,21 @@ $('#actions img').on('mousedown',function(){
 		composing();
 	}
 	else{
-		if((action=='update'||'compose') && $('#actForm input').val()==''){
-			setTimeout(function(){$('#actForm input')[0].focus();},50);
-			return !!0;
+		if((action=='update'||'compose')){
+			var selCount = $('#actForm select').length, check = 0; 
+			if(selCount > 0){
+				$('#actForm select').each(function(sel){
+					($(sel).val().length > 0) && check++;
+				});
+				if(check != selCount) return !!0;
+			}
+			check = 0; 
+			if($('#actForm input').length > 0){
+				$('#actForm input').each(function(inp){
+					($(inp).val().length > 0) && check++;
+				});
+				if(check < 2) return !!0;
+			}
 		}
 		if($('#itemAction').val() =='compose') {
 			action = 'compose';
