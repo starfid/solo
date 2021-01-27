@@ -21,4 +21,5 @@
 	$get->current['method']=='link' && $data->result['count']==1 && $get->linkMethod($data->result);
 
 	require($setting['folder']['system'].'/view.php');
-	new View(array_merge($setting['folder'],$setting['personal']),$get->current,$data->result);
+	unset($setting['database'],$setting['priv']);
+	new View($setting,$get->current,$data->result);
