@@ -83,7 +83,7 @@ $.init.prototype = {
 };
 
 var selList = [], app, listCount, prevStream = 0, shifted = !!0, isPortrait = !0, isStacked = !!0, noRibbon = !!0, prevList = {}, prevFlag = null, screenWidth = parseInt(window.innerWidth);
-isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0;
+isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0, firstComposing = !!0;
 
 searchFocus = function(){
 	$('#search').length > 0 &&
@@ -148,6 +148,7 @@ createKey = function(){
 	}
 },
 listSelected = function(o){
+	firstComposing = !!0;
 	$('#itemAction').val('');
 	hideDelete && $('#delete').css('display','block');
 	if(!response[app]) return !!0;
@@ -190,13 +191,6 @@ listSelected = function(o){
 		}
 	}
 
-	/**************
-	if($('#lineChart').length>0 && 'itemChartLabel' in res && 'itemChartNumber' in res){
-		console.log(res['itemChartLabel']);
-		console.log(res['itemChartNumber']);
-	}
-	**************/
-
 	!isPortrait && $('#backButton').css('display','none');
 },
 mobileLink = function(){
@@ -208,6 +202,7 @@ mobileLink = function(){
 	});
 },
 submitting = function(submit){
+	
 	prepare = function() {
 		$('#shell').css({
 			'padding-top'	:'5px',
@@ -346,6 +341,21 @@ pinning = function(){
 	});
 },
 composing = function(){
+	if(firstComposing) {
+		var typed = "";
+		$('.row input').each(function(text){
+			typed += $(text).val();
+		});
+		if(typed.length>2){
+			if(!confirm('Cancel your current entry?')){
+				return !!0;
+			}
+		}
+	}
+	else {
+		firstComposing = !0;
+	}
+	
 	if($('#delete').length==1) $('#delete').css('display','none'); hideDelete = !0;
 	$('.selParent').each(function(o){
 		$(o).remove('class');
@@ -359,6 +369,7 @@ composing = function(){
 		$('#actForm input')[0].focus();
 	},10);
 	$('#itemAction').val('compose');
+	
 },
 logOpening = function(opening,launch){
 	!opening && gap.reverse();
@@ -599,10 +610,11 @@ $('#actions img').on('mousedown',function(){
 			}
 			check = 0; 
 			if($('#actForm input').length > 0){
-				$('#actForm input').each(function(inp){
-					($(inp).val().length > 0) && check++;
+				var typed = "";
+				$('.row input').each(function(text){
+					typed += $(text).val();
 				});
-				if(check < 2) return !!0;
+				if(typed.length<3) return !!0;
 			}
 		}
 		if($('#itemAction').val() =='compose') {
