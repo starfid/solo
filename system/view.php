@@ -235,7 +235,11 @@
 			else {
 				$s .= "\n\t\t\t\t\t<li class='options' id='navlogin'><a href=\"?log=out\">Logout</a></li>";
 			}
-
+			
+			if(strpos($_SERVER['HTTP_USER_AGENT'],"Windows NT")){
+				$s .= "\n\t\t\t\t\t<li><a href=\"#\" onclick=\"window.close()\">Close</a></li>";
+			}
+			
 			$s .= "\n\t\t\t\t\t<li class=\"waste\"></li>";
 			$s .= "\n\t\t\t\t</ul>";
 			$s .= "\n\t\t\t</div>";
