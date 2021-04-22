@@ -257,10 +257,6 @@
 				$error = 'Data does not contain itemTitle';
 				$s .= $problem.$error.$report;
 			}
-			elseif($noInfo) {
-				$error = 'Data does not contain itemInfo';
-				$s .= $problem.$error.$report;
-			}
 			elseif($noKey) {
 				$error = 'Data does not contain itemKey';
 				$s .= $problem.$error.$report;
@@ -271,8 +267,13 @@
 					$flag = array_key_exists('itemFlag',$this->data['match'][$i]) && $this->data['match'][$i]['itemFlag'] == 'true'?"class='flag'":"";
 
 					$s .= "\n\t\t\t\t\t<dl index=\"".$i."\" ".$flag." data-key=\"".$this->data['match'][$i]['itemKey']."\">";
+
+					if(empty(trim($this->data['match'][$i]['itemTitle']))) $this->data['match'][$i]['itemTitle'] = "Title is not provided";
 					$s .= "\n\t\t\t\t\t\t<dt>".$this->highlight($this->data['match'][$i]['itemTitle'])."</dt>";
+					
+					if(!array_key_exists('itemInfo',$this->data['match'][$i]) || empty(trim($this->data['match'][$i]['itemInfo']))) $this->data['match'][$i]['itemInfo'] = "No description";
 					$s .= "\n\t\t\t\t\t\t<dd>".$this->highlight($this->data['match'][$i]['itemInfo'])."</dd>";
+					
 					$s .= "\n\t\t\t\t\t</dl>";
 				}
 			}
