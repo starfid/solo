@@ -468,7 +468,7 @@ sideButton = function(side){
 		'element':'div',
 		'id':'side'
 	});
-	if(screenWidth > 768 || $('#itemAction').val() == 'compose') return;
+	if(screenWidth > 768 || ($('#itemAction').length == 1 && $('#itemAction').val() == 'compose')) return;
 	$('#side').css({
 		'position':'absolute',
 		'z-index':2,
