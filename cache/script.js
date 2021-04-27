@@ -375,13 +375,13 @@ logOpening = function(opening,launch){
 				$('#loginPop').css('top','0');
 				$('#loginForm').css('margin-top',marginTop+'px');
 				setTimeout(function(){
-					$('#loginPop').length == 1 && $('#loginPop').destroy();
+					if($('#loginPop').length == 1) $('#loginPop').destroy();
 				},60000);
 			}
 			else {
 				window.scrollTo(0,0);
 				launch && showNav(!!0) && $('#loginForm')[0].submit();
-				$('#loginPop').destroy();
+				if($('#loginPop').length == 1) $('#loginPop').destroy();
 				gap.reverse();
 			}
 		}
