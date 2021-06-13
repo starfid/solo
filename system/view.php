@@ -2,7 +2,6 @@
 	class View {
 		private $auth, $apps, $cacheFolder, $meta, $minimizeHTML, $developing, $current, $data;
 
-		//function __construct($setting, $current, $data){
 		function __construct($setting, $current, $data){
 			$this->apps = $current['apps'];
 			$this->meta = $setting['personal'];
@@ -186,7 +185,7 @@
 				}
 
 				if(in_array('itemChartLabel',$this->data['columns']) && in_array('itemChartNumber',$this->data['columns']) ){
-					$s .= "<div id=\"lineChart\"><img width=\"100%\" src=\"?group=".$this->current['group']."&app=".$this->current['app']."&keyword=".$keyword."&format=linechart\" /></div>";
+					$s .= "<svg width=\"100%\" height=\"100%\"><polyline points=\"\" /></svg>";
 				}
 			
 				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemAction\" value=\"\" id=\"itemAction\" />";
@@ -350,57 +349,6 @@
 			header("Location: ?".$group.$app.$search);		
 		}
 
-		function linechart(){
-			if($this->data['count']<1) return false;
-			if(!(in_array('itemChartLabel',$this->data['columns']) && in_array('itemChartNumber',$this->data['columns']))) return false;
 
-			$ay = array();
-			$al = array();
-			foreach($this->data['match'] as $rows => $row){
-				$ay[] = $row['itemChartLabel'];
-				$al[] = $row['itemChartNumber'];
-			}
-
-			$al = array_reverse($al);
-			$ay = array_reverse($ay);
-
-			$gl = $al;
-			$gy = $ay;
-
-			$mx = max($al);
-			foreach($gl as $qs) {
-				$pr = ($qs*100)/$mx;
-				$gr[] = $qs.".".floor($pr);
-			}
-			header ("Content-type: image/png");
-
-			$x_gap = 1390/count($gl);
-
-			$x_max=1300; //width canvas		
-			$y_max=291; //height canvas
-
-			$im = @ImageCreate($x_max, $y_max);
-			$background_color = ImageColorAllocate($im,250,250,250);
-			$cx = explode(",","43,145,227");
-			$cy = explode(",","50,50,50");
-			$line_color1 = ImageColorAllocate($im,$cx[0],$cx[1],$cx[2]);
-			$text_color1 = ImageColorAllocate($im,100,100,100);
-			imagesetthickness($im, 4);
-			$x1=0; $y1=0; $z1 = 0; $first_one="yes"; $prev = 0; $z2 = 0;
-			
-			for($i=0;$i<count($gr);$i++) {
-				$nd = explode(".",$gr[$i]);
-				$x2 = ($first_one=="no")?$x1+$x_gap:$x1+4;
-				$y2=$y_max-(($nd[1]*1)+16);
-				$next = ($i+1)==count($gl)?$gl[$i]:$gl[$i+1];
-				$gyi = ($gl[$i] > $next && $gl[$i] > $prev)?$y2-12:$y2+6;
-				ImageString($im,8,$x2-4,$gyi-4,$gy[$i],$text_color1);
-				if($first_one=="no"){ imageline($im,$x1,$y1,$x2,$y2,$line_color1); }
-				$x1=$x2; $y1=$y2; $z1=$z2;
-				$first_one="no"; $prev = $gl[$i];
-			}
-			ImagePNG($im);
-			return(false);
-		}
 
 	}
