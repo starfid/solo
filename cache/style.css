@@ -269,8 +269,7 @@ h2 {
 .actInput {
 	background-color: transparent
 }
-.actInput,
-.row {
+.actInput, .row, svg text {
 	font-size: 17px
 }
 hr {
@@ -291,8 +290,6 @@ select, .label {
 	width: 95%
 }
 
-#linechart {padding:20px}
-
 #ribbon .act {border-bottom: solid 1px}
 hr {border-bottom: 1px solid}
 .row {border-bottom: 1px solid}
@@ -311,6 +308,10 @@ dl{border-bottom: solid 1px;}
 #loginForm input[type="text"] {margin-bottom: -1px;border-bottom-left-radius: 0;border-bottom-right-radius: 0;}
 #loginForm input[type="password"]{border-top-left-radius: 0;border-top-right-radius: 0;}
 #loginForm input[type="button"]{background-color:#0080FD;color:white;margin-bottom:10px;border-radius:6px;cursor:pointer;}
+
+svg {padding:20px}
+svg polyline {fill:none;stroke:#2069A1;stroke-width:3}
+svg text {visibility:hidden;fill:black;}
 
 /** Light Theme  **/
 body, .act, .actw, #wlis,#plis,#pinned select {background-color:#F6F5F5;} /*background for right header and middle content*/
@@ -365,9 +366,9 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 
 @media (max-width: 768px) {
 	.act,.actw {margin-left:0}
-	#wlis,.act,.lis,.nav {width: 100%}
+	#wlis,.act,.lis,.nav, svg {width: 100%}
 	#userid strong,.act,.nav {display: none}
-	.row, #lineChart {padding: 8px}
+	.row, svg {padding: 8px}
 	h2,h5 {margin: 8px}
 	body, .act, .actw, #wlis,#plis,#pinned select {background-color:#FFFFFF;} /*background for right header and middle content*/
 	#shell, #actForm, #actForm select {background-color: #FFFFFF; } /*background for right content */
@@ -404,7 +405,7 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 	.group {font-size: 19px!important;}
 	dl {font-size: 20px;}
 	dt {font-size: 24px}
-	.actInput,.row {font-size: 20px}
+	.actInput,.row, svg text {font-size: 20px}
 	select {font-size:20px}
 }
 @media (prefers-color-scheme: dark) {
@@ -423,6 +424,7 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 	#userid strong {color: #0987FF}
 	dl span {color:white}
 	.actInput, select {color:#7E828F}
+	svg text {fill:#7E828F}
 	#navSelected {background-color: #3F4452}
 	#report:active {background-color:#303134}
 	#ribbon .act {border-color:#333437}
@@ -437,8 +439,7 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 	#pinAct {background-color:#3E3F43;border-bottom:solid 1px #434447;border-top:solid 1px #434447}
 	::-webkit-input-placeholder, :-moz-placeholder,::-moz-placeholder, :-ms-input-placeholder  {color: #bfbfbf}
 	body {background-color:#333437}
-	#lineChart img {-webkit-filter: invert(.893);filter: invert(.893);}	
-	#loginPop,	#loginForm input[type="text"], #loginForm input[type="password"] {background-color:#46484D;}
+	#loginPop, #loginForm input[type="text"], #loginForm input[type="password"] {background-color:#46484D;}
 	#loginForm input[type="text"], #loginForm input[type="password"] {border-color:#46484D;}
 	#loginForm {background-color:#1E1F23;color:#E4E6E7}
 }
