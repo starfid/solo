@@ -214,8 +214,8 @@
 				if($types == 'services') continue;
 				ksort($type);
 				foreach($type as $groups => $group){
-					$groups = ucwords(strtolower(str_replace('_',' ',$groups)));
-					$s .= "\n\t\t\t\t<li class=\"group\">".$groups."</li>";
+					$groupLabel = ucwords(strtolower(str_replace('_',' ',$groups)));
+					$s .= "\n\t\t\t\t<li class=\"group\">".$groupLabel."</li>";
 					asort($group);
 					foreach($group as $app){
 						$selected = ($groups == $this->current['group'] && $app == $this->current['app'])?' id="navSelected"':'';
