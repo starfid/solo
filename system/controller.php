@@ -157,7 +157,12 @@
 					(time() - $_SESSION[$this->token]['auth']['start'])/60 > $minute
 				)
 				||
-				(isset($_GET['log']) && $_GET['log'] == 'out')
+				(
+					isset($_SESSION[$this->token]['auth']) &&
+					!isset($_SESSION[$this->token]['type'])
+				)
+				|| (isset($_GET['log']) && $_GET['log'] == 'out')
+				|| (isset($_GET['sign']) && $_GET['sign'] == 'out')
 			){
 				unset($_SESSION[$this->token]);
 				header('Location: ./');
