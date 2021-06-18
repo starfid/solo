@@ -5,7 +5,7 @@
 
 		function __construct($database,$current,$token) {
 			try {
-				$this->link = new PDO($database['rdbms'].":hostname=".$database['host'].";dbname=".$database['name'].";port=".$database['port'],$database['username'],$database['password']);
+				$this->link = new PDO($database['rdbms'].":hostname=".$database['host'].";charset=utf8;dbname=".$database['name'].";port=".$database['port'],$database['username'],$database['password']);
 				$this->link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			}
 			catch(PDOException $e) {
