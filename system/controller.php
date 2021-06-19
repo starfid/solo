@@ -50,7 +50,7 @@
 		}
 
 		function setApps($session){
-			$user = isset($session['auth'])?$session['auth']['type']:'guest';
+			$user = isset($session['auth']['type'])?$session['auth']['type']:'guest';
 			$temp = array();
 			foreach($this->priviledge[$user] as $type => $types){
 				if(array_key_exists($types,$this->current['apps'])){
@@ -65,7 +65,7 @@
 			$this->current['apps'] = $session['apps'];
 			$this->setApps($session);
 
-			$type = isset($session['auth'])?$session['auth']['type']:'guest';
+			$type = isset($session['auth']['type'])?$session['auth']['type']:'guest';
 			$folder = $session['apps'][$type];
 			$group = key($folder);
 			$app = min($folder[$group]);
