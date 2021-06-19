@@ -57,10 +57,24 @@ $.init.prototype = {
 	append: function(param) {
 		var el = document.createElement(param.element||'div');
 		param.hasOwnProperty('element') && delete param.element;
-		//el.innerHTML = param.hasOwnProperty('text')?param.text:'';
 		if(param.hasOwnProperty('text')) el.innerHTML = param.text; delete param.text;
 		this[0].appendChild(el);
 		for(var i in param) el.setAttribute(i,param[i]);
+	},
+	appendSVGText: function(param) {
+
+
+
+
+		var el = document.createElementNS('http://www.w3.org/2000/svg','text');
+		el.appendChild(document.createTextNode(param['text']));
+		if(param.hasOwnProperty('text')) delete param.text;
+		for(var i in param) el.setAttributeNS(null,i,param[i]);
+		
+		
+
+		this[0].appendChild(el);
+		
 	},
 	destroy: function() {
 		this[0].parentNode.removeChild(this[0]);
@@ -83,7 +97,7 @@ $.init.prototype = {
 };
 
 var selList = [], app, listCount, prevStream = 0, shifted = !!0, isPortrait = !0, isStacked = !!0, noRibbon = !!0, prevList = {}, prevFlag = null, screenWidth = parseInt(window.innerWidth);
-isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0,
+isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0, chartCreated = !!0;
 
 searchFocus = function(){
 	$('#search').length > 0 &&
@@ -190,6 +204,11 @@ listSelected = function(o){
 		}
 	}
 
+	if($('svg').length==1 && 'itemChartLabel' in res && 'itemChartNumber' in res){
+		!chartCreated && makingChart(response[app]);
+		showChartLabel(index);
+	}
+	
 	!isPortrait && $('#backButton').css('display','none');
 },
 mobileLink = function(){
@@ -481,9 +500,44 @@ shortIndicator = function(obj){
 	},300);
 	return true;
 },
+makingChart = function(res){
+	var svgWidth = 	$('#wlis').css('width')==screenWidth?screenWidth:$('#actForm').css('width');
+	var source = res.map(function(arr){
+		return {'label':arr.itemChartLabel,'number':arr.itemChartNumber}
+	}),
+	max = Math.max.apply(Math,source.map(function(o){return o.number;})),
+	gap = Math.floor(svgWidth/source.length),
+	x = 0, points = [], text = [];
+	for(i in source){
+		var y = 220-(Math.ceil((source[i]['number']*198)/max));
+		points.push(x+','+y);
+		text.push({
+			'x':x,
+			'y':y,
+			'label':source[i]['label']
+		});
+		x = x + gap;
+	}
+	
+	$('polyline').attr('points',points.join(' '));
+	for(i in text){
+		$('svg').appendSVGText({
+			'x':text[i]['x']-1,
+			'y':text[i]['y']-4,
+			'text':text[i]['label']
+		});
+
+	}
+	showChartLabel(0);
+	chartCreated = true;
+},
+showChartLabel = function(n){
+	$('text').css('visibility','hidden');
+	$('text')[n].style.visibility = 'visible';
+},
 logFormEnter = function(e){
 	if(e.key == 'Enter') logOpening(!!0,!0);
-}
+};
 
 document.body.onload = function(){
 	app = $("#app").val();
