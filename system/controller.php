@@ -96,7 +96,9 @@
 				if(isset($_POST['selIndex']) && !empty($_POST['selIndex']) && is_numeric($_POST['selIndex'])){
 					$this->current['selIndex'] = $_POST['selIndex'];
 				}
-				$_SESSION[$this->token]['auth']['start'] = time();
+				if(isset($_SESSION[$this->token]['auth'])){
+					$_SESSION[$this->token]['auth']['start'] = time();
+				}
 			}
 			elseif(
 				isset($_GET['keyword']) && !empty($_GET['keyword']) &&
