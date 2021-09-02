@@ -170,7 +170,8 @@ listSelected = function(o){
 		selList = [];
 		if(isStacked){
 			isStacked = !!0;
-			$('#stack').destroy();
+			$('#stack').length == 1 && $('#stack').destroy();
+			$('#shell').css('visibility','visible');
 			$('#shell').css({'padding-top':'0px','border':'0'});
 			$('#multiple').css({'zoom':'100%','padding':'0','background-color':'transparent'});
 			$('#actForm').css('overflow','auto');
