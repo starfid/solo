@@ -45,7 +45,7 @@
 			}
 			$selIndex =	0;
 
-			$title = ucwords(str_replace('_',' ',$this->current['app']))." ".ucwords(str_replace('_',' ',$this->current['group'])).", ".strtoupper($this->meta['label']);
+			$title = ucwords(str_replace('_',' ',$this->current['app']))." ".ucwords($this->current['group']).", ".strtoupper($this->meta['label']);
 			$currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			$searchAble = in_array('search',$this->current['methods']);
 			$disableSearch = $searchAble?'':'disabled ';
@@ -168,11 +168,14 @@
 					if(substr($column,-3)=='_id') $services[] = $column;
 					if(!in_array($column,$predefined)){
 						$s .= "\n\t\t\t\t\t<div class=\"row\">";
-						$s .= "\n\t\t\t\t\t\t<div class=\"label left\">".ucwords(str_replace(array('_id','_'),array('',' '),$column))."</div>";
+						$s .= "\n\t\t\t\t\t\t<div class=\"label left\">".ucwords(str_replace(array('_id','_bool','_'),array('','',' '),$column))."</div>";
 						$s .= "\n\t\t\t\t\t\t<div class=\"wrapper\">";
 
 						if(substr($column,-3)=='_id'){
 							$s .= "\n\t\t\t\t\t\t\t<select id=\"".$column."\" name=\"".$column."\"></select>";
+						}
+						elseif(substr($column,-5)=='_bool'){
+							$s .= "\n\t\t\t\t\t\t\t<label class=\"switch\"><input onclick=\"checker(this)\" type=\"checkbox\" id=\"".$column."\" name=\"".$column."\" value=\"\" checked /><span class=\"slider round\"></span></label>";
 						}
 						else{
 							$type = substr($column,-5)=='_date'?'date':'text';
@@ -185,7 +188,7 @@
 				}
 
 				if(in_array('itemChartLabel',$this->data['columns']) && in_array('itemChartNumber',$this->data['columns']) ){
-					$s .= "<svg width=\"100%\" height=\"100%\"><polyline points=\"\" /></svg>";
+					$s .= "\n\t\t\t\t\t<svg width=\"100%\" height=\"100%\">\n\t\t\t\t\t\t<polyline points=\"\" />\n\t\t\t\t\t</svg>";
 				}
 			
 				$s .= "\n\t\t\t\t\t<input type=\"hidden\" name=\"itemAction\" value=\"\" id=\"itemAction\" />";
@@ -214,8 +217,7 @@
 				if($types == 'services') continue;
 				ksort($type);
 				foreach($type as $groups => $group){
-					$groupLabel = ucwords(strtolower(str_replace('_',' ',$groups)));
-					$s .= "\n\t\t\t\t<li class=\"group\">".$groupLabel."</li>";
+					$s .= "\n\t\t\t\t<li class=\"group\">".ucwords(str_replace("_"," ",$groups))."</li>";
 					asort($group);
 					foreach($group as $app){
 						$selected = ($groups == $this->current['group'] && $app == $this->current['app'])?' id="navSelected"':'';
