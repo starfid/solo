@@ -62,17 +62,10 @@ $.init.prototype = {
 		for(var i in param) el.setAttribute(i,param[i]);
 	},
 	appendSVGText: function(param) {
-
-
-
-
 		var el = document.createElementNS('http://www.w3.org/2000/svg','text');
 		el.appendChild(document.createTextNode(param['text']));
 		if(param.hasOwnProperty('text')) delete param.text;
 		for(var i in param) el.setAttributeNS(null,i,param[i]);
-		
-		
-
 		this[0].appendChild(el);
 		
 	},
@@ -163,7 +156,7 @@ createKey = function(){
 },
 listSelected = function(o){
 	$('#itemAction').val('');
-	hideDelete && $('#delete').css('display','block');
+	hideDelete && ($('#delete').length == 1 && $('#delete').css('display','block'));
 	if(!response[app]) return !!0;
 	if(!shifted){
 		for(i in selList) $(selList[i]).remove('class');
@@ -183,12 +176,10 @@ listSelected = function(o){
 	selList.indexOf(o)<0 && selList.push(o);
 	createKey();
 
-
 	prevFlag !== null && $(prevFlag[0]).attr('class','flag');
 	prevFlag = $(o).attr('class')=='flag'?$(o):null;
 
 	$(o).attr('class','selParent');
-
 
 	var index = $(o).attr('index'), res = response[app][index];
 	visibleList(index);
@@ -196,7 +187,8 @@ listSelected = function(o){
 	for(key in res) {
 		if(/(itemRank|itemInfo|itemTitle|itemAction)/.test(key)) continue;
 		if(!!$('#'+key)[0]) {
-			if($('#'+key)[0].nodeName=="INPUT") $('#'+key).val(res[key]);
+			if($('#'+key)[0].type == 'checkbox') {$('#'+key).val(res[key]);$('#'+key)[0].checked = res[key]==1?!0:!!0; }
+			else if($('#'+key)[0].nodeName=="INPUT") $('#'+key).val(res[key]);
 			else {
 				var i, tmp = ['<option></option>'], col = response[key.replace('_id','')];
 				for(var i in col) tmp.push("<option value=\""+col[i]['itemKey']+"\" "+(res[key]==col[i]['itemKey']?'selected':'')+">"+col[i]['itemTitle']+"</option>");
@@ -284,6 +276,7 @@ submitting = function(submit){
 			}
 		];
 		var itr = 5, itv = 40;
+		boxchecking();
 		if(cut) {
 		 	$('#stack').destroy();
 		 	steps = steps.slice(1);
@@ -368,6 +361,12 @@ composing = function(){
 			$(obj).attr('type')=='date'?new Date().toISOString().slice(0, 10):''
 		);
 	});
+	if($('.switch').length>0){
+		$('.switch input').each(function(o){
+			$(o)[0].checked = false;
+			$(o).val('0');
+		});
+	}
 	setTimeout(function(){
 		$('#actForm input')[0].focus();
 	},10);
@@ -379,7 +378,6 @@ logOpening = function(opening,launch){
 	opening && marginTop == 190 && $('#loginPop').css('top','300px');
 	$.timer(gap.length,animSec,
 		function(i){
-			
 			$('#loginPop').css('top',(opening?gap[i]:marginTop+gap[i])+'px');
 			opening && $('#loginForm').css('margin-top',(gap[i]+marginTop)+'px');
 		},
@@ -487,7 +485,7 @@ sideButton = function(side){
 		'z-index':2,
 		'left':side=='left'?0:(parseInt(window.innerWidth)-28)+'px',
 		'top':'45px',
-		'width':'28px',
+		'width':'14px',
 		'height':(parseInt(window.innerHeight)-45)+'px'
 	});
 	$('#side').on('mousedown',function(){
@@ -538,7 +536,18 @@ showChartLabel = function(n){
 },
 logFormEnter = function(e){
 	if(e.key == 'Enter') logOpening(!!0,!0);
-};
+},
+checker = function(o){
+	$(o).val(o.checked?1:0);
+},
+boxchecking = function(){
+	if($('.switch').length>0){
+		$('.switch').css('display','none');
+		$('.switch input').each(function(o){
+			$(o)[0].checked = true;
+		});
+	}
+}
 
 document.body.onload = function(){
 	app = $("#app").val();
@@ -550,6 +559,7 @@ document.body.onload = function(){
 
 	if(notEmpty){
 		selList[0] = $('#wlis > dl')[$('#selIndex').val()];
+		selList[0] = selList[0] || $('#wlis > dl')[0];
 		($('dl').length && response[app]) && !noRibbon && listSelected(selList[0]);
 		if(document.cookie.indexOf('stream=on')>-1) setTimeout('streaming()',3000);
 	}
