@@ -22,3 +22,5 @@
 - SQL app based. Everyone can develop with SQL knowledge.
 - Multiple view formats with url params, HTML, JSON, XML, Print_r.
 - Double click list to pin.
+- SVG based line chart entry
+- Toggle entry
