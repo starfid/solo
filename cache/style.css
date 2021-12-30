@@ -313,13 +313,26 @@ svg {padding:20px}
 svg polyline {fill:none;stroke:#2069A1;stroke-width:3}
 svg text {visibility:hidden;fill:black;}
 
+.switch {position: relative; display: inline-block; width: 50px; height: 24px;}
+.switch #actForm input {opacity: 0;width: 0;height: 0;}
+
+.slider {position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;-webkit-transition:.4s;transition:.4s;}
+.slider:before {position: absolute;content: "";height: 16px;width: 16px;left: 4px;bottom: 4px;background-color: white;-webkit-transition: .4s;transition: .4s;}
+
+
+#actForm input:checked + .slider:before {-webkit-transform: translateX(26px);-ms-transform: translateX(26px);transform: translateX(26px);}
+
+.slider.round {border-radius: 24px;}
+.slider.round:before {border-radius: 50%;}
+
 /** Light Theme  **/
 body, .act, .actw, #wlis,#plis,#pinned select {background-color:#F6F5F5;} /*background for right header and middle content*/
 #shell, #actForm, #actForm select {background-color: #FAFAFA; } /*background for right content */
 .nav, .flag {background-color: #E6E5E3;} /*nav background*/
-#navSelected {background-color: #CECCC7} /*nav selected*/
+#navSelected,.slider {background-color: #CECCC7} /*nav selected*/
 .lis {background-color: #F6F5F5;} /*search background*/
-.selParent { background-color: #0069D9; } /*list background selected*/
+.selParent, #actForm input:checked + .slider { background-color: #0069D9; } /*list background selected*/
+#actForm input:focus + .slider {box-shadow: 0 0 1px #0069D9;}
 .selParent dt {color:#FEFAEE;}
 .selParent dd {color:#89BEFF}
 #ribbon .nav, .nav {border-right: solid 1px #B6B2B1}
@@ -341,7 +354,6 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 .label{color: #999;}
 #plis .label {color:#878FA5}
 #pinAct{background-color:#F3F3F3;border-bottom:solid 1px #CAC7C3;border-top:solid 1px #CAC7C3}
-
 
 @media (max-width: 1024px) {
 	#header img {display:block}
@@ -413,7 +425,8 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 	#shell, #actForm {background-color: #1E1F23; } /*background for right content */
 	#actForm select {background-color:#1E1F23}
 	.lis {background-color: #3E3F43;} /*search background*/
-	.selParent {background-color: #2069A1; } /*list background selected*/
+	.selParent, #actForm input:checked + .slider {background-color: #2069A1; } /*list background selected*/
+	#actForm input:focus + .slider {box-shadow: 0 0 1px #2069A1;}
 	.nav, .flag, #pinned select {background-color: #353944;} /*nav background*/
 	#wnav li, #wnav li a, #ribbon .nav, #search {color: #B4B5B6}
 	.group {color:#61687C!important}
@@ -425,7 +438,7 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 	dl span {color:white}
 	.actInput, select {color:#7E828F}
 	svg text {fill:#7E828F}
-	#navSelected {background-color: #3F4452}
+	#navSelected,.slider {background-color: #3F4452}
 	#report:active {background-color:#303134}
 	#ribbon .act {border-color:#333437}
 	.lis {border-color: #1A1A1B}
@@ -457,3 +470,4 @@ hr, #actForm .row {border-bottom: 1px solid #E5E5E5}
 @-moz-document url-prefix() {
 	.label, select {line-height: 1.4em;}
 }
+
