@@ -175,7 +175,7 @@
 							$s .= "\n\t\t\t\t\t\t\t<select id=\"".$column."\" name=\"".$column."\"></select>";
 						}
 						elseif(substr($column,-5)=='_bool'){
-							$s .= "\n\t\t\t\t\t\t\t<label class=\"switch\"><input onclick=\"checker(this)\" type=\"checkbox\" id=\"".$column."\" name=\"".$column."\" value=\"\" checked /><span class=\"slider round\"></span></label>";
+							$s .= "\n\t\t\t\t\t\t\t<label class=\"switch\"><input onclick=\"checker(this)\" type=\"checkbox\" id=\"".$column."\" name=\"".$column."\" value=\"1\" checked /><span class=\"slider round\"></span></label>";
 						}
 						else{
 							$type = substr($column,-5)=='_date'?'date':'text';
