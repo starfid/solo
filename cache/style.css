@@ -56,6 +56,7 @@ input[type=text] {
 	-webkit-border-radius: 0;
 	border-radius: 0
 }
+input::-webkit-date-and-time-value {text-align:left;}
 input[type=file],
 select {
 	border: none
