@@ -572,6 +572,7 @@ document.body.onload = function(){
 		$('.portrait').length < 1 && listSelected(selList[0]);
 	}
 	if(screenWidth < 1280){
+		$('#systrayCol').attr('content',isLight?'#FFFFFF':'#3E3F43');
 		$('title').text($('.pad').text());
 		mobileLink();
 	}
