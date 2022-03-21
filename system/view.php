@@ -73,7 +73,7 @@
 			$s .= "\n\t\t<meta name=\"google\" content=\"notranslate\" />";
 			$s .= "\n\t\t<meta name=\"google\" value=\"notranslate\" />";
 
-			$s .= "\n\t\t<meta name=\"theme-color\" content=\"#353944\" id=\"systrayCol\" />";
+			$s .= "\n\t\t<meta name=\"theme-color\" content=\"#CECCC7\" id=\"systrayCol\" />";
 			$s .= "\n\t\t<meta name=\"format-detection\" content=\"telephone=no\">";
 			$s .= "\n\t\t<meta content=\"text/html;charset=UTF-8\" http-equiv=\"Content-Type\" />";
 			$s .= "\n\t\t<meta property=\"og:url\" content=\"".$currentURL."/\" />";
