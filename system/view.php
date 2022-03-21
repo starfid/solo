@@ -117,7 +117,8 @@
 				$s .= "\n\t\t\t\t<div class=\"right\" id=\"userid\" onclick=\"document.location='?log=out'\">";
 			}
 
-			$s .= "\n\t\t\t\t\t<strong class=\"left\">".ucwords($this->auth['username'])."</strong>";
+			$label = $this->auth['username']=="guest"?"Sign In":"Sign Out";
+			$s .= "\n\t\t\t\t\t<strong class=\"left\">".$label."</strong>";
 
 			$s .= "\n\t\t\t\t</div>";
 			$s .= "\n\t\t\t</div></div>";
