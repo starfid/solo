@@ -571,11 +571,11 @@ document.body.onload = function(){
 		$('#view > .lis,.act').css('height','100%');
 		$('.portrait').length < 1 && listSelected(selList[0]);
 	}
-	if(screenWidth < 1180){//ipadAir
-		$('#systrayCol').attr('content',isLight?'#FFFFFF':'#3E3F43');
+	if(screenWidth < 1180){ //ipad Air
 		$('title').text($('.pad').text());
 		mobileLink();
 	}
+	$('#systrayCol').attr('content',isLight?'#CECCC7':'#17181C');
 };
 
 document.onkeyup = function(e){
