@@ -571,7 +571,7 @@ document.body.onload = function(){
 		$('#view > .lis,.act').css('height','100%');
 		$('.portrait').length < 1 && listSelected(selList[0]);
 	}
-	if(screenWidth < 1280){
+	if(screenWidth < 1180){//ipadAir
 		$('#systrayCol').attr('content',isLight?'#FFFFFF':'#3E3F43');
 		$('title').text($('.pad').text());
 		mobileLink();
