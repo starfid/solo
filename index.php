@@ -22,4 +22,4 @@
 
 	require($setting['folder']['system'].'/view.php');
 	unset($setting['database'],$setting['priv']);
-	new View($setting,$get->current,$data->result);
+	array_key_exists("apps",$get->current) && new View($setting,$get->current,$data->result);
