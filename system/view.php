@@ -45,7 +45,7 @@
 			}
 			$selIndex =	0;
 
-			$title = ucwords(str_replace('_',' ',$this->current['app']))." ".ucwords($this->current['group']).", ".strtoupper($this->meta['label']);
+			$title = $this->nameFormat($this->current['app'])." ".ucwords($this->current['group']).", ".strtoupper($this->meta['label']);
 			$currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			$searchAble = in_array('search',$this->current['methods']);
 			$disableSearch = $searchAble?'':'disabled ';
@@ -218,11 +218,11 @@
 				if($types == 'services') continue;
 				ksort($type);
 				foreach($type as $groups => $group){
-					$s .= "\n\t\t\t\t<li class=\"group\">".ucwords(str_replace("_"," ",$groups))."</li>";
+					$s .= "\n\t\t\t\t<li class=\"group\">".$this->nameFormat($groups)."</li>";
 					asort($group);
 					foreach($group as $app){
 						$selected = ($groups == $this->current['group'] && $app == $this->current['app'])?' id="navSelected"':'';
-						$s .= "\n\t\t\t\t\t<li".$selected."><a class='links' href=\"?group=".$groups."&amp;app=".$app."\">".ucwords(str_replace("_"," ",$app))."</a></li>";
+						$s .= "\n\t\t\t\t\t<li".$selected."><a class='links' href=\"?group=".$groups."&amp;app=".$app."\">".$this->nameFormat($app)."</a></li>";
 					}
 				}
 			}
@@ -346,13 +346,19 @@
 			return stripslashes($string);
 		}
 
-		private function link() {
+		function link() {
 			$group = "group=".$this->data[0]['groupLink'];
 			$app = "&app=".$this->data[0]['appLink'];
 			$search = isset($this->data[0]['searchLink'])?"&search=".urlencode($this->data[0]['searchLink']):"";
 			header("Location: ?".$group.$app.$search);		
 		}
 
-
+		function nameFormat($str){
+			$str = preg_replace("/^\d{1}_/is","",$str);
+			$str = str_replace("_"," ",$str);
+			$str = strtolower($str);
+			$str = ucwords($str);
+			return $str;
+		}
 
 	}
