@@ -195,7 +195,7 @@ dl {
 	padding: 10px;
 }
 #problem,
-#userid strong,
+#userid strong, #charCount,
 dt {
 	font-size: 21px
 }
@@ -210,7 +210,7 @@ dl span {
 	font-weight: bolder
 }
 #problem,
-#userid strong,
+#userid strong, #charCount,
 h2 {
 	font-weight: 300
 }
@@ -262,6 +262,11 @@ h2 {
 #pinAct span {cursor:pointer}
 #actions img {
 	margin-left: 5px
+}
+#charCount {
+	display:inline-block;
+	color:#999999;
+	padding: 9px 30px 10px 10px;
 }
 #userid strong {
 	display: block;
