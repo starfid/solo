@@ -45,7 +45,7 @@
 			}
 			$selIndex =	0;
 
-			$title = $this->nameFormat($this->current['app'])." ".ucwords($this->current['group']).", ".strtoupper($this->meta['label']);
+			$title = $this->nameFormat($this->current['app'])." ".ucwords($this->current['group']).", ".ucwords($this->meta['label']);
 			$currentURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			$searchAble = in_array('search',$this->current['methods']);
 			$disableSearch = $searchAble?'':'disabled ';
@@ -93,6 +93,9 @@
 			$s .= "\n\t\t\t\t\t<img id=\"backButton\" class=\"left\" src=\"".$this->cacheFolder."/back.png\" />";
 
 			if($this->isNotError){
+				
+				$s .= "\n\t\t\t\t<span id=\"charCount\"></span>";
+
 				asort($this->current['methods']);
 				foreach(array_diff($this->current['methods'],array('primary','search')) as $methods => $method){
 					if(!($this->isEmpty && $method != 'update')){
