@@ -90,7 +90,7 @@ $.init.prototype = {
 };
 
 var selList = [], app, listCount, prevStream = 0, shifted = !!0, isPortrait = !0, isStacked = !!0, noRibbon = !!0, prevList = {}, prevFlag = null, screenWidth = parseInt(window.innerWidth);
-isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0, chartCreated = !!0;
+isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0, chartCreated = !!0, countTimeout = 0;
 
 searchFocus = function(){
 	$('#search').length > 0 &&
@@ -704,4 +704,11 @@ $('.wrapper > input').on('keydown',function(e){
 $('#mobileCompose').length == 1 && $('#mobileCompose').on('click',function(e){
 	composing();
 	showDetail(true);
+});
+$('.actInput').on('keydown',function(){
+	clearTimeout(countTimeout);
+	$('#charCount').text(this.value.length);
+	countTimeout = setTimeout(function(){
+		$('#charCount').text('');
+	},1000);
 });
