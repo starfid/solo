@@ -705,7 +705,7 @@ $('#mobileCompose').length == 1 && $('#mobileCompose').on('click',function(e){
 	composing();
 	showDetail(true);
 });
-$('.actInput').on('keydown',function(){
+$('.actInput').on('keyup',function(){
 	clearTimeout(countTimeout);
 	$('#charCount').text(this.value.length);
 	countTimeout = setTimeout(function(){
