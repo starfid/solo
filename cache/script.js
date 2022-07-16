@@ -90,7 +90,7 @@ $.init.prototype = {
 };
 
 var selList = [], app, listCount, prevStream = 0, shifted = !!0, isPortrait = !0, isStacked = !!0, noRibbon = !!0, prevList = {}, prevFlag = null, screenWidth = parseInt(window.innerWidth);
-isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0, chartCreated = !!0, countTimeout = 0;
+isLight = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?!!0:true, gap = [50,30,5], animSec = 40, hideDelete = !!0, hideLink = !!0, chartCreated = !!0, countTimeout = 0;
 
 searchFocus = function(){
 	$('#search').length > 0 &&
@@ -157,6 +157,8 @@ createKey = function(){
 listSelected = function(o){
 	$('#itemAction').val('');
 	hideDelete && ($('#delete').length == 1 && $('#delete').css('display','block'));
+	hideLink && ($('#link').length == 1 && $('#link').css('display','block'));
+	
 	if(!response[app]) return !!0;
 	if(!shifted){
 		for(i in selList) $(selList[i]).remove('class');
@@ -353,6 +355,8 @@ pinning = function(){
 },
 composing = function(){
 	if($('#delete').length==1) $('#delete').css('display','none'); hideDelete = !0;
+	if($('#link').length==1) $('#link').css('display','none'); hideLink = !0;
+	
 	$('.selParent').each(function(o){
 		$(o).remove('class');
 	});
