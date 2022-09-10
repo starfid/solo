@@ -192,8 +192,23 @@ listSelected = function(o){
 			if($('#'+key)[0].type == 'checkbox') {$('#'+key).val(res[key]);$('#'+key)[0].checked = res[key]==1?!0:!!0; }
 			else if($('#'+key)[0].nodeName=="INPUT") $('#'+key).val(res[key]);
 			else {
-				var i, tmp = ['<option></option>'], col = response[key.replace('_id','')];
-				for(var i in col) tmp.push("<option value=\""+col[i]['itemKey']+"\" "+(res[key]==col[i]['itemKey']?'selected':'')+">"+col[i]['itemTitle']+"</option>");
+				var i, tmp = [], raw = response[key.replace('_id','')];
+				if('itemGroup' in raw[0]){
+					group = raw.reduce((result, currentValue) => {
+						(result[currentValue['itemGroup']] = result[currentValue['itemGroup']] || []).push(currentValue);
+						return result;
+					}, {});
+					for(var i in group){
+						tmp.push("<optgroup label=\""+i+"\">");
+						for(var j in group[i]){
+							tmp.push("<option value=\""+group[i][j]['itemKey']+"\" "+(res[key]==group[i][j]['itemKey']?'selected':'')+">"+group[i][j]['itemTitle']+"</option>");
+						}
+						tmp.push("</optgroup>");
+					}
+				}
+				else {
+					for(var i in raw) tmp.push("<option value=\""+raw[i]['itemKey']+"\" "+(res[key]==raw[i]['itemKey']?'selected':'')+">"+raw[i]['itemTitle']+"</option>");
+				}
 				$('#'+key).text(tmp.join(''));
 			}
 		}
