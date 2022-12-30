@@ -193,6 +193,7 @@ listSelected = function(o){
 			else if($('#'+key)[0].nodeName=="INPUT") $('#'+key).val(res[key]);
 			else {
 				var i, tmp = [], raw = response[key.replace('_id','')];
+				
 				if('itemGroup' in raw[0]){
 					group = raw.reduce((result, currentValue) => {
 						(result[currentValue['itemGroup']] = result[currentValue['itemGroup']] || []).push(currentValue);
@@ -327,12 +328,54 @@ firstCompose = function(){
 		}
 	});
 	$('.wrapper > *').each(function(o){
-		if($(o)[0].nodeName=='SELECT'){
+		if($(o)[0].nodeName=='SELECT'){			
 			var col = response[$(o).attr('id').replace('_id','')], i, tmp = [];
-			for(var i in col) tmp.push("<option value=\""+col[i]['itemKey']+"\">"+col[i]['itemTitle']+"</option>");
+			tmp.push("<option value=\"\"></option>");
+			if('itemGroup' in col[0]){
+				group = col.reduce((result, currentValue) => {
+					(result[currentValue['itemGroup']] = result[currentValue['itemGroup']] || []).push(currentValue);
+					return result;
+				}, {});
+				
+				for(var i in group){
+					tmp.push("<optgroup label=\""+i+"\">");
+					for(var j in group[i]){
+						tmp.push("<option value=\""+group[i][j]['itemKey']+"\">"+group[i][j]['itemTitle']+"</option>");
+					}
+					tmp.push("</optgroup>");
+				}
+			}
+			else {
+				for(var i in col) tmp.push("<option value=\""+col[i]['itemKey']+"\">"+col[i]['itemTitle']+"</option>");
+			}
 			$(o).text(tmp.join(''));
 		}
 	});
+
+
+/*
+
+				
+				if('itemGroup' in raw[0]){
+					group = raw.reduce((result, currentValue) => {
+						(result[currentValue['itemGroup']] = result[currentValue['itemGroup']] || []).push(currentValue);
+						return result;
+					}, {});
+					for(var i in group){
+						tmp.push("<optgroup label=\""+i+"\">");
+						for(var j in group[i]){
+							tmp.push("<option value=\""+group[i][j]['itemKey']+"\" "+(res[key]==group[i][j]['itemKey']?'selected':'')+">"+group[i][j]['itemTitle']+"</option>");
+						}
+						tmp.push("</optgroup>");
+					}
+				}
+				else {
+					for(var i in raw) tmp.push("<option value=\""+raw[i]['itemKey']+"\" "+(res[key]==raw[i]['itemKey']?'selected':'')+">"+raw[i]['itemTitle']+"</option>");
+				}
+
+*/
+
+
 	$('#itemAction').val('compose');
 },
 deleteConfirm = function(){
